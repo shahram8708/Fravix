@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='logo2.png') }}" type="image/x-icon">
+    <meta name="description"
+        content="Fravix E-Library is your ultimate digital hub for academic resources tailored exclusively for Fravix and GTU students and faculty. Discover and share curated study materials, e-books, research papers, and much more. Access advanced features like user profile management, OTP verification, interactive bookmarks, resource uploads, live chat, account verification, peer networking, admin dashboard, privacy settings, and instant support via chatbot. Boost your educational journey by engaging with our vibrant community. Register today and explore the extensive library of digital resources designed for academic excellence at Fravix.">
+    <meta name="keywords"
+        content="Fravix E-Library, digital library, academic resources, e-books, research papers, engineering materials, student resources, faculty resources, OTP login, bookmark study materials, user profile, interactive learning, resource sharing, upload study materials, chat with users, follow peers, study community, academic excellence, university library, educational resources, GTU library, digital learning, digital education, academic support, verified users, profile verification, Fravix login, library policies, educational platform, online resources, e-library notifications, educational repository, digital study tools, study materials, resource upload system, user management, advanced search, interactive features, user-friendly interface, digital academic support, Fravix faculty, online education, study community hub, peer network, study support, knowledge sharing, student study aids, university learning platform, online knowledge base, educational hub, library chat support, OTP verification process, promo code registration, student network, digital resource management, academic library management, Fravix college email, educational portal, university digital library, online academic tools, educational community, study tools for students, verified accounts, online study tools, collaborative learning, personalized library experience, digital university library, Fravix academic resources, student engagement, learning management system, library membership, Fravix digital learning, academic success tools, faculty collaboration, resource discovery, college resources, advanced search library, university study aids, resource accessibility, digital resource hub, library tools, Fravix resource platform, digital study materials, student academic success, university online tools, educational success, peer interaction, digital library features, admin dashboard, GTU resources, library support, profile customization, library system, Fravix learning, digital learning portal, online study portal, study network, faculty resource hub, online academic resource center, student collaboration, faculty network, educational sharing, academic collaboration platform, Fravix online library, knowledge portal, university resource hub, educational tech platform, study platform, academic tech, university digital tools, Fravix tech tools, university learning center">
+    <meta property="og:title" content="Fravix E-Library - Academic Resources Tailored for Fravix Students">
+    <meta property="og:description"
+        content="Explore Fravix E-Library’s innovative platform, designed for Fravix and GTU students to access and share academic resources, including e-books, research papers, engineering study materials, and more. Benefit from advanced features like user profile management, OTP login, chat functionality, resource uploads, bookmarks, and peer interaction. Register today and be part of a collaborative learning community.">
+    <meta property="og:url" content="https://fravix.onrender.com/">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="{{ url_for('static', filename='logo2.png') }}">
+    <meta property="og:image:alt" content="Fravix E-Library - Empowering Academic Success">
+    <meta property="og:site_name" content="Fravix E-Library">
+    <meta property="og:locale" content="en_US">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Fravix E-Library - Unlock a World of Knowledge">
+    <meta name="twitter:description"
+        content="Access Fravix E-Library to discover a wide range of study resources, e-books, research papers, and more! Enjoy features like OTP login, profile verification, resource uploads, chat support, and interactive bookmarks. Join our learning community today!">
+    <meta name="twitter:image" content="{{ url_for('static', filename='logo2.png') }}">
+    <meta name="twitter:site" content="@Fravix_E_Library">
+    <link rel="canonical" href="https://fravix.onrender.com/">
+    <meta name="keywords"
+        content="Fravix E-Library, online digital library, academic resources, GTU e-library, engineering resources, e-learning platform, resource sharing, profile management, OTP verification, verified accounts, digital learning tools, study materials, Fravix student portal, faculty resources, library notifications, user bookmarks, interactive learning, student community, upload resources, live chat, user profile customization, academic excellence, university academic tools, faculty collaboration, GTU study support, knowledge sharing platform, student learning hub, verified library accounts, resource discovery, study materials upload, engineering study tools, Fravix resource hub, digital education platform, online academic community, digital university library, educational success, study network, Fravix learning platform, online library services, user interaction, educational resource management, interactive academic tools, digital learning aids, collaborative learning community, personalized library experience, Fravix digital platform, study resources, educational repository, engineering e-books, academic support portal, study tool integration, library management system, academic library, university library services, library notifications, digital study portal, peer interaction, resource uploading system, online study collaboration, educational tech tools, Fravix academic resources, college resource management, study resource platform, university digital education, Fravix e-library features, student engagement, library tech tools, academic tools for students, study materials sharing, university resource sharing, academic networking, student tech platform, university online resources, Fravix study portal, online knowledge sharing, academic support community, GTU academic success, digital resource sharing, university learning system, study tool platform, Fravix faculty resources, educational support, digital university resources, online academic engagement, student learning portal, Fravix student collaboration, digital tools for academic success, resource discovery platform, university library access, collaborative academic tools, Fravix online learning community">
+    <meta name="subject"
+        content="Fravix E-Library - A Hub for Students and Faculty to Access and Share Academic Resources">
+    <meta name="author" content="Fravix E-Library Team">
+    <meta name="robots" content="index, follow">
+    <meta name="revisit-after" content="7 days">
+    <meta name="rating" content="General">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="application-name" content="Fravix E-Library">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="{{ url_for('static', filename='logo2.png') }}">
+    <meta name="apple-mobile-web-app-title" content="Fravix E-Library">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="geo.placename" content="Fravix, Gujarat, India">
+    <meta name="geo.region" content="IN-GJ">
+    <meta name="geo.position" content="23.077667;72.540348">
+    <meta name="ICBM" content="23.077667, 72.540348">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Group Chat with {{ group.name }} - Fravix E-Library</title>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .chat-box {
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 0.5rem;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            height: 70vh;
+            overflow-y: auto;
+            padding: 15px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 0.5rem;
+        }
+
+        .message strong {
+            display: block;
+        }
+
+        .text-end {
+            background-color: #e9f7ff;
+        }
+
+        .text-start {
+            background-color: #f1f1f1;
+        }
+
+        .input-group input {
+            border-radius: 0.5rem 0 0 0.5rem;
+        }
+
+        .input-group button {
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">{{ group.name }} Group Chat</h2>
+
+        <div class="chat-box mb-4" id="chat-box">
+            {% for message in group_messages %}
+            <div class="message {{ 'text-end' if message.user.id == current_user.id else 'text-start' }}">
+                <strong>{{ message.user.username }}</strong>
+                <span>{{ message.content }}</span>
+                <small class="text-muted d-block">{{ message.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</small>
+            </div>
+            {% endfor %}
+        </div>
+
+        <form method="POST" action="{{ url_for('send', group_id=group.id) }}" id="chat-form">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" name="content" placeholder="Type your message here..." required>
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="submit">Send</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <audio id="message-sound" src="{{ url_for('static', filename='notification_sound.mp3') }}" preload="auto"></audio>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+
+        function scrollToBottom() {
+            const chatBox = document.getElementById('chat-box');
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        let lastMessageId = {{ group_messages|length > 0 and group_messages[-1].id or 0 }};
+
+        document.getElementById('chat-form').addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    const messageInput = this.querySelector('input[name="content"]');
+    const sendButton = this.querySelector('button[type="submit"]');
+
+    sendButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sending...';
+    sendButton.disabled = true;
+
+    $.ajax({
+        url: "{{ url_for('send', group_id=group.id) }}",
+        method: 'POST',
+        data: { content: messageInput.value },
+        success: function () {
+            messageInput.value = '';
+            scrollToBottom();
+        },
+        error: function (error) {
+            alert("Failed to send the message. Please try again.");
+            console.error("Message sending error: ", error);
+        },
+        complete: function () {
+            sendButton.innerHTML = 'Send';
+            sendButton.disabled = false;
+        }
+    });
+
+    setTimeout(scrollToBottom, 100);
+});
+
+        function fetchNewMessages() {
+    $.ajax({
+        url: "{{ url_for('group_chat_updates', group_id=group.id) }}",
+        method: 'GET',
+        data: { last_message_id: lastMessageId },
+        success: function (newMessages) {
+            if (newMessages.length > 0) {
+                newMessages.forEach(function (message) {
+                    const messageHtml = `
+                        <div class="message ${message.user_id == {{ current_user.id | tojson }} ? 'text-end' : 'text-start'}">
+                            <strong>${message.username}</strong>
+                            <span>${message.content}</span>
+                            <small class="text-muted d-block">${message.timestamp}</small>
+                        </div>
+                    `;
+                    $('#chat-box').append(messageHtml);
+                    lastMessageId = Math.max(lastMessageId, message.id);
+                });
+
+
+                const lastMessage = newMessages[newMessages.length - 1];
+                if (lastMessage.user_id !== {{ current_user.id | tojson }}) {
+                    const messageSound = document.getElementById('message-sound');
+                    messageSound.play().catch(err => console.warn("Audio play failed: ", err));
+                }
+
+                scrollToBottom();
+            }
+        },
+        error: function (error) {
+            console.error("Error fetching new messages: ", error);
+        }
+    });
+}
+
+        setInterval(fetchNewMessages, 1000);
+
+        window.onload = function () {
+            scrollToBottom();
+        };
+    </script>
+</body>
+
+</html>

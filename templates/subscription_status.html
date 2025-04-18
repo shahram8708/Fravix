@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4 text-primary font-weight-bold">Your Subscription Status</h2>
+
+    <div class="card shadow-lg border-light rounded">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Subscription Details</h4>
+        </div>
+        <div class="card-body">
+            <p><strong>Subscription Status:</strong> <span class="text-capitalize">{{ user.subscription_status }}</span>
+            </p>
+            <p><strong>Subscription Type:</strong> {{ user.subscription_type }}</p>
+
+            {% if user.subscription_type == 'Lifetime' %}
+            <p><strong>Expiry Date:</strong> Lifetime</p>
+            {% elif user.subscription_expiry %}
+            <p><strong>Expiry Date:</strong> {{ user.subscription_expiry.strftime('%Y-%m-%d') }}</p>
+            {% else %}
+            <p><strong>Expiry Date:</strong> Not available</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="card mt-4 shadow-lg border-light rounded">
+        <div class="card-header bg-info text-white">
+            <h4 class="mb-0">Your Subscription Benefits</h4>
+        </div>
+        <div class="card-body">
+            <p><strong>Congratulations!</strong> You’ve unlocked exclusive benefits with your premium subscription!
+                Enjoy unlimited access to the following features:</p>
+            <ul class="list-unstyled">
+                <li><i class="fas fa-check-circle text-success"></i> <strong>Unlimited Study Material Upload</strong> –
+                    Upload as many study materials as you want, including old or new content. Share your knowledge
+                    freely with the community!</li>
+                <li><i class="fas fa-check-circle text-success"></i> <strong>Unlimited Material Access</strong> – Access
+                    a vast collection of study materials shared by others, without any restrictions. Knowledge has no
+                    boundaries here!</li>
+                <li><i class="fas fa-check-circle text-success"></i> <strong>AI-Powered Chatbot Assistance</strong> –
+                    Enjoy access to our AI-powered chatbot, designed to make your learning journey smoother and faster.
+                    It can assist with answering questions, explaining concepts, and guiding you to the best materials
+                    for your needs!</li>
+                <li><i class="fas fa-check-circle text-success"></i> <strong>Connect with Others</strong> – Follow and
+                    chat with other users freely, expanding your network of like-minded learners.</li>
+                <li><i class="fas fa-check-circle text-success"></i> <strong>Create and Join Unlimited Groups</strong> –
+                    Whether public or private, you can create and join an unlimited number of groups to collaborate,
+                    share resources, and engage in meaningful discussions with peers.</li>
+                <li><i class="fas fa-check-circle text-success"></i> <strong>Sell Products</strong> – Upload and sell as
+                    many products as you like, from study-related materials to educational tools, books, and more. Plus,
+                    you can purchase products at discounted prices, directly from fellow subscribers.</li>
+                <li><i class="fas fa-check-circle text-success"></i> <strong>Unlimited Product Purchases</strong> – Buy
+                    unlimited new or used study-related items or other products, without commission charges. Get the
+                    best deals from users who’ve uploaded them, and enjoy cost savings across the board!</li>
+                <li><i class="fas fa-check-circle text-success"></i> <strong>Real-Time Notifications</strong> – Receive
+                    instant notifications about profile visits, messages, and activities, ensuring you stay updated on
+                    everything happening around you.</li>
+                <li><i class="fas fa-check-circle text-success"></i> <strong>Profile Insights</strong> – See who’s
+                    visiting your profile, giving you the chance to connect directly with people interested in your work
+                    and products.</li>
+                <li><i class="fas fa-check-circle text-success"></i> <strong>Exclusive AI Features</strong> – As part of
+                    your subscription, unlock exclusive AI-powered tools designed to enhance your experience. From
+                    personalized learning recommendations to smart search capabilities, the AI integration will elevate
+                    your overall journey.</li>
+            </ul>
+
+            <p><strong>But that's not all! By subscribing, you’re not just gaining access to these amazing features,
+                    you’re unlocking a world of opportunities for growth, collaboration, and success. Whether you're
+                    looking to share your knowledge, expand your network, or purchase the best study materials and
+                    products, this platform is designed to support your educational goals.</strong></p>
+
+            <p><strong>Imagine being able to:</strong></p>
+            <ul class="list-unstyled">
+                <li><i class="fas fa-check-circle text-success"></i> Access a never-ending supply of study resources for
+                    every subject imaginable.</li>
+                <li><i class="fas fa-check-circle text-success"></i> Sell your unused study materials or educational
+                    tools to others at great prices.</li>
+                <li><i class="fas fa-check-circle text-success"></i> Use AI technology to make your learning journey
+                    more efficient and personalized.</li>
+                <li><i class="fas fa-check-circle text-success"></i> Benefit from exclusive deals and products,
+                    available only to premium users.</li>
+                <li><i class="fas fa-check-circle text-success"></i> Never miss an update or important connection thanks
+                    to real-time notifications.</li>
+            </ul>
+
+            <p><strong>Take the leap today and unlock all these benefits! Don’t miss out on the ultimate educational
+                    experience. Subscribe now and take control of your learning journey like never before!</strong></p>
+            <p>If you have any questions or need further assistance, feel free to reach out. We’re here to help you
+                succeed!</p>
+        </div>
+    </div>
+
+    <div class="alert alert-success mt-4 custom-subscription-alert">
+        <h2 class="alert-heading text-center font-weight-bold">You Are Already Subscribed!</h2>
+        <p class="lead text-center">
+            Thank you for subscribing! You now have access to all the premium features. Enjoy your unlimited learning
+            and product-selling experience.
+        </p>
+    </div>
+</div>
+
+<script>
+    function showSpinner(button) {
+        button.disabled = true;
+        button.innerHTML = `
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Processing...
+        `;
+    }
+</script>
+
+<style>
+    .card-header {
+        background-color: #007bff;
+        color: white;
+        font-size: 1.2rem;
+    }
+
+    .card-body {
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+
+    .card-body p,
+    .card-body ul {
+        font-size: 1.1rem;
+    }
+
+    .card {
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .custom-subscription-alert {
+        background-color: #28a745;
+        color: white;
+        font-size: 1.2rem;
+        border-radius: 10px;
+        padding: 30px;
+    }
+
+    .custom-subscription-alert .alert-heading {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+
+    .list-unstyled li {
+        margin-bottom: 10px;
+    }
+
+    .list-unstyled i {
+        margin-right: 10px;
+    }
+
+    .btn-spinner {
+        position: relative;
+    }
+
+    .btn-spinner .spinner-border {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    @media (max-width: 768px) {
+        .card-body {
+            font-size: 1rem;
+        }
+    }
+</style>
+
+{% endblock %}

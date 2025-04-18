@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Privacy Policy</h1>
+
+    <div class="bg-light p-4 rounded shadow-sm">
+        <p>Your privacy is of utmost importance to us at Fravix E-Library. This policy outlines how we collect, use, and
+            safeguard your personal information, ensuring full transparency and trust in our practices.</p>
+
+        <h5 class="mt-4">1. Information Collection</h5>
+        <p>We may collect the following types of information when you register, browse, or use our services:</p>
+        <ul>
+            <li><strong>Personal Information:</strong> This includes your name, email address, enrollment number, and
+                any other details you provide during registration.</li>
+            <li><strong>Usage Data:</strong> Information such as your IP address, browser type, and access times may be
+                automatically collected for analytical and security purposes.</li>
+        </ul>
+
+        <h5 class="mt-4">2. Use of Information</h5>
+        <p>Your personal information will be used for the following purposes:</p>
+        <ul>
+            <li><strong>Service Improvement:</strong> To improve the user experience by understanding your preferences
+                and usage patterns.</li>
+            <li><strong>Communication:</strong> To send you important updates, notifications, or service-related
+                announcements.</li>
+            <li><strong>Security:</strong> To ensure the integrity of your account and maintain a safe and secure
+                platform.</li>
+        </ul>
+
+        <h5 class="mt-4">3. Data Protection & Security</h5>
+        <p>We implement strict security measures to protect your personal information from unauthorized access,
+            disclosure, alteration, or destruction. This includes:</p>
+        <ul>
+            <li>Encryption of sensitive data.</li>
+            <li>Secure access controls and procedures to prevent unauthorized usage of your account.</li>
+            <li>Regular audits and system checks to ensure data security.</li>
+        </ul>
+
+        <h5 class="mt-4">4. Sharing of Information</h5>
+        <p>We are committed to safeguarding your privacy. Your personal information will never be sold or shared with
+            third parties without your explicit consent, except in the following situations:</p>
+        <ul>
+            <li>If required by law or to comply with legal proceedings.</li>
+            <li>To protect the rights, property, or safety of Fravix E-Library and its users.</li>
+        </ul>
+
+        <h5 class="mt-4">5. Cookies & Tracking Technologies</h5>
+        <p>We may use cookies and similar technologies to enhance your browsing experience. These small data files allow
+            us to personalize your experience and track user behavior on our site. You can manage cookie preferences in
+            your browser settings.</p>
+
+        <h5 class="mt-4">6. User Rights & Control</h5>
+        <p>As a user, you have the right to access, modify, or delete your personal information at any time. If you wish
+            to exercise these rights or have any privacy concerns, please reach out to us via our <a
+                href="{{ url_for('contact') }}" style="text-decoration: none;">Contact Us</a> page.</p>
+
+        <h5 class="mt-4">7. Changes to the Privacy Policy</h5>
+        <p>We reserve the right to update this Privacy Policy from time to time. Any significant changes will be
+            communicated to you via email or on the platform. By continuing to use our services, you accept the updated
+            terms.</p>
+
+        <p>If you have any questions regarding this Privacy Policy or how your data is handled, please do not hesitate
+            to <a href="{{ url_for('contact') }}" style="text-decoration: none;">Contact Us</a>. Your privacy and
+            security are our top priorities.</p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,227 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h3 class="text-center text-primary my-4">{{ product.item_name }}</h3>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+<div>
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }}">{{ message }}</div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
+
+<div class="row">
+    <div class="col-md-6">
+        <img src="{{ url_for('static', filename='uploads/' + product.item_image) }}" class="img-fluid rounded shadow-sm"
+            alt="Product Image">
+    </div>
+    <div class="col-md-6">
+        <div class="product-details">
+            <p><strong>Main Category:</strong> {{ product.main_category }}</p>
+            <p><strong>Subcategory:</strong> {{ product.subcategory or 'N/A' }}</p>
+            <p><strong>Detail:</strong> {{ product.detail or 'N/A' }}</p>
+            <p><strong>Description:</strong> {{ product.description }}</p>
+            <p><strong>Price:</strong> ₹{{ product.price }}</p>
+            <p><strong>Condition:</strong> {{ product.condition }}</p>
+            <p><strong>Brand:</strong> {{ product.brand or 'N/A' }}</p>
+            <p><strong>Warranty:</strong> {{ product.warranty or 'N/A' }}</p>
+            <p><strong>Contact Name:</strong> {{ product.contact_name }}</p>
+            <p><strong>Contact Email:</strong> {{ product.contact_email }}</p>
+            <p><strong>Contact Phone:</strong> {{ product.contact_phone }}</p>
+            <p><strong>Location:</strong> {{ product.location or 'N/A' }}</p>
+            <p><strong>Additional Information:</strong> {{ product.additional_info or 'N/A' }}</p>
+            <hr>
+            <p><strong>Uploaded By:</strong> {{ user.username }}</p>
+
+            {% if current_user.id == product.user_id %}
+            {% for request in product.purchase_requests %}
+            <div class="card my-3">
+                <div class="card-body">
+                    <p><strong>Buyer:</strong> {{ request.buyer.username }}</p>
+                    <p><strong>Email:</strong> {{ request.buyer.email }}</p>
+                    <p><strong>Contact Number:</strong> {{ request.contact_number }}</p>
+
+                    {% if request.status == 'Pending' %}
+                    <form action="{{ url_for('confirm_purchase', request_id=request.id) }}" method="post"
+                        class="d-inline">
+                        <button type="submit" class="btn btn-success btn-sm btn-spinner">Confirm</button>
+                    </form>
+                    <form action="{{ url_for('reject_purchase', request_id=request.id) }}" method="post"
+                        class="d-inline">
+                        <button type="submit" class="btn btn-danger btn-sm btn-spinner">Reject</button>
+                    </form>
+                    {% elif request.status == 'Confirmed' %}
+                    <p class="text-success">Status: Confirmed</p>
+                    {% elif request.status == 'Rejected' %}
+                    <p class="text-danger">Status: Rejected</p>
+                    {% else %}
+                    <p class="text-muted">Status: Pending</p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+
+            <h4 class="my-3">Actions:</h4>
+
+            {% if product.status == 'Available' %}
+            <form action="{{ url_for('mark_out_of_stock', product_id=product.id) }}" method="post" class="d-inline">
+                <button type="submit" class="btn btn-warning btn-sm btn-spinner">Mark as Out of Stock</button>
+            </form>
+            {% elif product.status == 'Out of Stock' %}
+            <form action="{{ url_for('mark_in_stock', product_id=product.id) }}" method="post" class="d-inline">
+                <button type="submit" class="btn btn-success btn-sm btn-spinner">Mark as In Stock</button>
+            </form>
+            {% else %}
+            <p class="text-danger">Unknown product status.</p>
+            {% endif %}
+
+            <form action="{{ url_for('delete_product', product_id=product.id) }}" method="post" class="d-inline">
+                <button type="submit" class="btn btn-danger btn-sm btn-spinner">Delete Product</button>
+            </form>
+            <a href="{{ url_for('edit_product', product_id=product.id) }}"
+                class="btn btn-warning btn-sm btn-spinner">Edit Product</a>
+
+            {% else %}
+            {% if product.status == 'Available' %}
+            {% set user_request = current_user.purchase_requests|selectattr('product_id', 'equalto',
+            product.id)|list|first %}
+            {% if user_request %}
+            <p class="alert alert-info">You have already sent a purchase request for this product. Please check your
+                email for further instructions.</p>
+            <p><strong>Your Purchase Request Status:</strong>
+                {% if user_request.status == 'Pending' %}
+                <span class="text-muted">Pending</span>
+                {% elif user_request.status == 'Confirmed' %}
+                <span class="text-success">Confirmed</span>
+                {% elif user_request.status == 'Rejected' %}
+                <span class="text-danger">Rejected</span>
+                {% else %}
+                <span class="text-info">Status Unknown</span>
+                {% endif %}
+            </p>
+            {% else %}
+            <form action="{{ url_for('purchase_product', product_id=product.id) }}" method="post"
+                onsubmit="showSpinner(this.querySelector('button'))">
+                <p><strong>Your Contact Number:</strong></p>
+                <input type="text" name="contact_number" class="form-control mb-2"
+                    placeholder="Enter your contact number" required>
+                <button type="submit" class="btn btn-primary btn-spinner">Purchase</button>
+            </form>
+            {% endif %}
+            {% else %}
+            <p class="text-danger">This product is out of stock.</p>
+            {% endif %}
+            {% endif %}
+            <!-- Share Button and Functionality -->
+            <div class="mt-3">
+                <button id="shareButton" class="btn btn-info btn-sm btn-spinner" onclick="copyLink()">
+                    Share
+                </button>
+            </div>
+
+            <script>
+                function copyLink() {
+                    const productLink = window.location.href;
+                    const input = document.createElement('input');
+                    document.body.appendChild(input);
+                    input.value = productLink;
+                    input.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(input);
+
+                    const button = document.getElementById('shareButton');
+                    button.innerHTML = `
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Link Copied
+        `;
+                    setTimeout(() => {
+                        button.innerHTML = 'Share';
+                    }, 2000);
+                }
+            </script>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function showSpinner(button) {
+        button.disabled = true;
+        button.innerHTML = `
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Processing...
+        `;
+    }
+</script>
+
+<style>
+    .product-details p {
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    .product-details p strong {
+        color: #007bff;
+    }
+
+    .card {
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-body {
+        background-color: #f8f9fa;
+        font-size: 1rem;
+    }
+
+    .btn-spinner {
+        position: relative;
+    }
+
+    .btn-spinner .spinner-border {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    /* Hover effects for buttons */
+    .btn-primary:hover,
+    .btn-warning:hover,
+    .btn-success:hover,
+    .btn-danger:hover {
+        opacity: 0.85;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .btn-warning {
+        background-color: #ffc107;
+        border-color: #ffc107;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+        .col-md-6 {
+            margin-bottom: 20px;
+        }
+    }
+</style>
+
+{% endblock %}

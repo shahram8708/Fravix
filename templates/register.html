@@ -1,0 +1,245 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h2 class="text-center mb-4">Register</h2>
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('register') }}" id="registerForm">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" name="username"
+                                placeholder="e.g. Sam Altman" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email address</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Choose Login Method</label>
+                            <div>
+                                <input type="radio" id="otpMethod" name="loginMethod" value="otp" checked>
+                                <label for="otpMethod">OTP</label>
+                                <input type="radio" id="promoCodeMethod" name="loginMethod" value="promo_code">
+                                <label for="promoCodeMethod">Promo Code</label>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <button type="button" class="btn btn-primary me-2" id="sendOTPButton">
+                                <span id="sendOTPText">Send OTP</span>
+                                <span class="spinner-border spinner-border-sm ms-2" id="loadingIndicator"
+                                    style="display: none;"></span>
+                            </button>
+                        </div>
+
+                        <div class="mb-3" id="otpField">
+                            <label for="otp" class="form-label">Enter OTP</label>
+                            <input type="text" class="form-control" id="otp" name="otp" required>
+                            <button type="button" class="btn btn-primary mt-2" id="verifyOTPButton">
+                                <span id="verifyOTPText">Verify OTP</span>
+                                <span class="spinner-border spinner-border-sm ms-2" id="verifyLoading"
+                                    style="display: none;"></span>
+                            </button>
+                        </div>
+
+                        <div class="mb-3" id="promoCodeField" style="display: none;">
+                            <label for="promoCode" class="form-label">Promo Code</label>
+                            <input type="text" class="form-control" id="promoCode" name="promoCode"
+                                placeholder="Enter promo code">
+                        </div>
+
+                        <div class="mb-3" id="passwordField" style="display: none;">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+
+                        <div class="mb-3" id="confirmPasswordField" style="display: none;">
+                            <label for="confirmPassword" class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword"
+                                required>
+                        </div>
+
+                        <div class="mb-3" id="showPasswordCheckboxField" style="display: none;">
+                            <input type="checkbox" id="showPasswordCheckbox">
+                            <label for="showPasswordCheckbox" class="form-label">Show Password</label>
+                        </div>
+
+                        <div class="mb-3 d-flex align-items-center">
+                            <button type="submit" class="btn btn-primary me-2" id="registerButton"
+                                style="display: none;">
+                                <span>Submit</span>
+                                <span class="spinner-border spinner-border-sm ms-2" id="submitLoading"
+                                    style="display: none;"></span>
+                            </button>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="{{ url_for('login') }}" class="text-decoration-none">Already have an account?
+                                Login</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div id="successMessage" class="alert alert-success mt-3" style="display: none;">
+                Registration successful! You can now log in.
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('showPasswordCheckbox').addEventListener('change', function () {
+        const passwordField = document.getElementById('password');
+        const confirmPasswordField = document.getElementById('confirmPassword');
+
+        if (this.checked) {
+            passwordField.type = 'text';
+            confirmPasswordField.type = 'text';
+        } else {
+            passwordField.type = 'password';
+            confirmPasswordField.type = 'password';
+        }
+    });
+
+    document.getElementById('sendOTPButton').addEventListener('click', function () {
+        const email = document.getElementById('email').value;
+        if (!email) {
+            alert('Please enter your email first.');
+            return;
+        }
+
+        document.getElementById('loadingIndicator').style.display = 'inline-block';
+        document.getElementById('sendOTPText').style.display = 'none';
+        this.disabled = true;
+
+        sendOTP(email);
+    });
+
+    function sendOTP(email) {
+        fetch('/send_otp', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email: email })
+        })
+            .then(response => {
+                document.getElementById('loadingIndicator').style.display = 'none';
+                document.getElementById('sendOTPText').style.display = 'inline';
+                document.getElementById('sendOTPButton').disabled = false;
+
+                if (response.ok) {
+                    alert("OTP sent to your email.");
+                    document.getElementById('otpField').style.display = 'block';
+                    document.getElementById('verifyOTPButton').style.display = 'inline-block';
+                } else {
+                    alert("Failed to send OTP. Please try again.");
+                }
+            })
+            .catch(error => {
+                console.error('Error sending OTP:', error);
+                document.getElementById('loadingIndicator').style.display = 'none';
+                document.getElementById('sendOTPText').style.display = 'inline';
+                document.getElementById('sendOTPButton').disabled = false;
+            });
+    }
+
+    document.getElementById('verifyOTPButton').addEventListener('click', function () {
+        const otp = document.getElementById('otp').value;
+        const email = document.getElementById('email').value;
+
+        document.getElementById('verifyLoading').style.display = 'inline-block';
+        document.getElementById('verifyOTPText').style.display = 'none';
+        this.disabled = true;
+
+        validateOTP(email, otp);
+    });
+
+    function validateOTP(email, otp) {
+        fetch('/validate_otp', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email: email, otp: otp })
+        })
+            .then(response => {
+                document.getElementById('verifyLoading').style.display = 'none';
+                document.getElementById('verifyOTPText').style.display = 'inline';
+                document.getElementById('verifyOTPButton').disabled = false;
+
+                if (response.ok) {
+                    alert("OTP validated successfully! Now you can register.");
+                    document.getElementById('promoCodeField').style.display = 'none';
+                    document.getElementById('passwordField').style.display = 'block';
+                    document.getElementById('confirmPasswordField').style.display = 'block';
+                    document.getElementById('showPasswordCheckboxField').style.display = 'block';
+                    document.getElementById('registerButton').style.display = 'inline';
+                } else {
+                    alert("Invalid OTP. Please try again.");
+                }
+            })
+            .catch(error => {
+                console.error('Error validating OTP:', error);
+                document.getElementById('verifyLoading').style.display = 'none';
+                document.getElementById('verifyOTPText').style.display = 'inline';
+                document.getElementById('verifyOTPButton').disabled = false;
+            });
+    }
+
+    document.getElementById('registerForm').addEventListener('submit', function (event) {
+        const promoCodeField = document.getElementById('promoCodeField');
+        const promoCodeInput = document.getElementById('promoCode').value;
+
+        const promoCodeBinary = promoCodeInput.split('').map(char => {
+            return char.charCodeAt(0).toString(2).padStart(8, '0');
+        }).join(' ');
+
+        const validPromoCodeBinary = '01110110 01100111 01100101 01100011 01000000 01100101 01101100 01101001 01100010 01110010 01100001 01110010 01111001';
+
+        if (promoCodeField.style.display === 'block' && promoCodeBinary !== validPromoCodeBinary) {
+            alert('Invalid promo code. Please try again.');
+            event.preventDefault();
+        } else {
+            document.getElementById('registerButton').style.display = 'none';
+            document.getElementById('submitLoading').style.display = 'inline';
+        }
+    });
+
+    document.querySelectorAll('input[name="loginMethod"]').forEach(function (radio) {
+        radio.addEventListener('change', function () {
+            const otpMethod = document.getElementById('otpMethod').checked;
+            if (otpMethod) {
+                document.getElementById('otpField').style.display = 'block';
+                document.getElementById('promoCodeField').style.display = 'none';
+                document.getElementById('passwordField').style.display = 'none';
+                document.getElementById('confirmPasswordField').style.display = 'none';
+                document.getElementById('showPasswordCheckboxField').style.display = 'none';
+                document.getElementById('sendOTPButton').style.display = 'inline-block';
+                document.getElementById('registerButton').style.display = 'none';
+
+                document.getElementById('otp').setAttribute('required', true);
+                document.getElementById('promoCode').removeAttribute('required');
+                document.getElementById('password').removeAttribute('required');
+                document.getElementById('confirmPassword').removeAttribute('required');
+            } else {
+                document.getElementById('otpField').style.display = 'none';
+                document.getElementById('sendOTPButton').style.display = 'none';
+                document.getElementById('promoCodeField').style.display = 'block';
+                document.getElementById('passwordField').style.display = 'block';
+                document.getElementById('confirmPasswordField').style.display = 'block';
+                document.getElementById('showPasswordCheckboxField').style.display = 'block';
+                document.getElementById('registerButton').style.display = 'inline';
+
+                document.getElementById('otp').removeAttribute('required');
+                document.getElementById('promoCode').setAttribute('required', true);
+                document.getElementById('password').setAttribute('required', true);
+                document.getElementById('confirmPassword').setAttribute('required', true);
+            }
+        });
+    });
+</script>
+{% endblock %}

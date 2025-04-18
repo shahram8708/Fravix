@@ -1,0 +1,405 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h3 class="text-center">Available Products</h3>
+
+<div class="mb-4">
+    <input type="text" id="searchInput" class="form-control" placeholder="Search for products..."
+        onkeyup="filterProducts()">
+</div>
+
+<div class="mb-3">
+    <label for="filterMainCategory" class="form-label">Main Category</label>
+    <select class="form-select" id="filterMainCategory">
+        <option value="" selected disabled>Select Main Category</option>
+        <option value="textbooks">Textbooks and Course Materials</option>
+        <option value="stationery">Notebooks, Paper, and Stationery Supplies</option>
+        <option value="electronics">Electronics and Gadgets</option>
+        <option value="lab">Laboratory Equipment and Kits</option>
+        <option value="digital">Digital Resources and Software</option>
+        <option value="furniture">Furniture and Study Space Essentials</option>
+        <option value="clothing">Clothing and Educational Merchandise</option>
+        <option value="sports">Sports and Extracurricular Supplies</option>
+        <option value="health">Health and Wellness Products</option>
+        <option value="exam">Exam and Certification Preparation Materials</option>
+        <option value="miscellaneous">Miscellaneous Educational Aids</option>
+    </select>
+</div>
+
+<div class="mb-3" id="filterSubcategoryContainer" style="display: none;">
+    <label for="filterSubcategory" class="form-label">Subcategory</label>
+    <select class="form-select" id="filterSubcategory">
+        <option value="" selected disabled>Select Subcategory</option>
+    </select>
+</div>
+
+<div class="mb-3" id="filterDetailContainer" style="display: none;">
+    <label for="filterDetail" class="form-label">Detail</label>
+    <select class="form-select" id="filterDetail">
+        <option value="" selected disabled>Select Detail</option>
+    </select>
+</div>
+
+<div class="row" id="productsContainer">
+    {% for product in products %}
+    <div class="col-md-4 mb-4 product-card" data-main-category="{{ product.main_category }}"
+        data-subcategory="{{ product.subcategory }}" data-detail="{{ product.detail }}">
+        <div class="card shadow-sm border-light rounded">
+            <img src="{{ url_for('static', filename='uploads/' + product.item_image) }}" class="card-img-top"
+                alt="Product Image">
+
+            <div class="card-body">
+                <h5 class="card-title">{{ product.item_name }}</h5>
+
+                <p class="card-text">{{ product.description[:100] }}...</p>
+
+                <p><strong>Price:</strong> ₹{{ product.price }}</p>
+                <p><strong>Condition:</strong> {{ product.condition }}</p>
+
+                <a href="{{ url_for('product_detail', product_id=product.id) }}" class="btn btn-primary btn-spinner">
+                    View Details
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+    function showSpinner(button) {
+        button.disabled = true;
+        button.innerHTML = `
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Processing...
+        `;
+    }
+</script>
+
+<style>
+    .product-card {
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .card {
+        border-radius: 8px;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card-body {
+        padding: 20px;
+        background-color: #f8f9fa;
+    }
+
+    .card-img-top {
+        border-bottom: 2px solid #f1f1f1;
+    }
+
+    .btn-spinner {
+        position: relative;
+    }
+
+    .btn-spinner .spinner-border {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
+
+    @media (max-width: 768px) {
+        .col-md-4 {
+            margin-bottom: 20px;
+        }
+    }
+</style>
+
+<script>
+    document.getElementById("filterMainCategory").addEventListener("change", filterProducts);
+    document.getElementById("filterSubcategory").addEventListener("change", filterProducts);
+    document.getElementById("filterDetail").addEventListener("change", filterProducts);
+
+    function filterProducts() {
+        const searchText = document.getElementById("searchInput").value.toLowerCase();
+        const mainCategory = document.getElementById("filterMainCategory").value;
+        const subcategory = document.getElementById("filterSubcategory").value;
+        const detail = document.getElementById("filterDetail").value;
+        document.querySelectorAll(".product-card").forEach(card => {
+            const productName = card.querySelector(".card-title").textContent.toLowerCase();
+            const productDescription = card.querySelector(".card-text").textContent.toLowerCase();
+            const productMainCategory = card.getAttribute("data-main-category");
+            const productSubcategory = card.getAttribute("data-subcategory");
+            const productDetail = card.getAttribute("data-detail");
+
+            const matchesSearch = searchText === "" ||
+                productName.includes(searchText) ||
+                productDescription.includes(searchText);
+
+            const matchesCategory = (!mainCategory || productMainCategory === mainCategory) &&
+                (!subcategory || productSubcategory === subcategory) &&
+                (!detail || productDetail === detail);
+            if (matchesSearch && matchesCategory) {
+                card.style.display = "block";
+            } else {
+                card.style.display = "none";
+            }
+        });
+    }
+
+    const categoryData = {
+        textbooks: {
+            "School-Level Textbooks": [
+                "Primary School Textbooks (Math, Science, English, Social Studies)",
+                "Middle and High School Textbooks (History, Geography, Languages, Biology, Physics, Chemistry, Computer Science)",
+                "Language Textbooks (Hindi, Sanskrit, French, Spanish)"
+            ],
+            "College/University-Level Textbooks": [
+                "Subject-specific books for all major courses (Engineering, Medicine, Law, Arts, Science, Commerce, etc.)",
+                "Reference Books (Advanced Calculus, Organic Chemistry, Anatomy, etc.)",
+                "Course Readers and Study Guides"
+            ],
+            "Competitive Exam Books": [
+                "IIT-JEE, NEET, CAT, GMAT, GRE, UPSC, and other exam prep guides",
+                "Mock Tests and Sample Papers",
+                "Previous Year Solved Papers"
+            ],
+            "Notes and Study Guides": [
+                "Handwritten Notes (School or College)",
+                "Practice Sets and Workbooks",
+                "Quick Revision Guides and Summarized Notes"
+            ]
+        },
+        stationery: {
+            "Notebooks": [
+                "Single Subject Notebooks (lined, unlined, grid)",
+                "Multi-subject Notebooks and Binders",
+                "Spiral and Hardbound Notebooks"
+            ],
+            "Paper Products": [
+                "Loose-leaf Paper (lined, blank, and graph)",
+                "Sticky Notes and Index Cards",
+                "Flashcards for quick study"
+            ],
+            "Stationery Basics": [
+                "Pens, Pencils, Mechanical Pencils, and Refills",
+                "Erasers, Sharpeners, Highlighters, and Markers"
+            ],
+            "Organizational Supplies": [
+                "Files, Folders, and Ring Binders",
+                "Document Sleeves and Plastic Folders",
+                "Index Dividers for Binders"
+            ],
+            "Art Supplies": [
+                "Colored Pencils, Crayons, Watercolors",
+                "Acrylic Paints, Paintbrushes, and Canvases",
+                "Sketchpads and Drawing Sheets"
+            ],
+            "Measuring and Geometry Tools": [
+                "Rulers, Protractors, Compasses, and Set Squares",
+                "Drafting Tools for architecture students"
+            ]
+        },
+        electronics: {
+            "Computing Devices": [
+                "Laptops (Windows, Mac, Chromebook)",
+                "Tablets (iPads, Android Tablets)",
+                "Desktops and All-in-One PCs"
+            ],
+            "Accessories": [
+                "External Hard Drives, USB Drives, SD Cards",
+                "Keyboard, Mouse, Stylus Pens",
+                "Laptop Bags, Sleeves, and Covers"
+            ],
+            "Audio/Visual Equipment": [
+                "Headphones (wired, wireless) and Earbuds",
+                "Webcams, Microphones, and Ring Lights",
+                "Projectors and Mini Screens"
+            ],
+            "Portable and Study-Friendly Gadgets": [
+                "Scientific and Graphing Calculators",
+                "Document Scanners and Printers",
+                "E-Readers (Kindle, Kobo, etc.)"
+            ],
+            "Power and Connectivity Accessories": [
+                "Power Banks, Charging Cables, Adapters",
+                "Extension Boards and Surge Protectors",
+                "Cable Organizers and Portable Chargers"
+            ]
+        },
+        lab: {
+            "Basic Lab Kits": [
+                "Science Experiment Kits (Physics, Chemistry, Biology)",
+                "Lab Manuals and Experiment Guide Books"
+            ],
+            "Advanced Scientific Equipment": [
+                "Microscopes, Magnifying Glasses, and Telescope Kits",
+                "Thermometers, pH Meters, and Hygrometers",
+                "Specimen Slides and Biological Models"
+            ],
+            "Technical Supplies for Engineering Students": [
+                "Circuit Boards and Electrical Components",
+                "Soldering Kits, Multimeters, and Oscilloscopes",
+                "Robotics Kits and Arduino Boards"
+            ],
+            "Medical and Nursing Kits": [
+                "Stethoscopes, BP Monitors, and Thermometers",
+                "Anatomy Models (Skeletons, Organs)",
+                "Lab Coats and Protective Gear"
+            ]
+        },
+        digital: {
+            "Educational Software": [
+                "Microsoft Office Suite (Word, Excel, PowerPoint)",
+                "Note-taking Software (OneNote, Evernote)",
+                "Project Management Software (Trello, Notion)"
+            ],
+            "Specialized Software for Subjects": [
+                "Engineering (MATLAB, AutoCAD, SolidWorks)",
+                "Design and Multimedia (Adobe Creative Suite, Figma)",
+                "Statistical Software (SPSS, Stata)"
+            ],
+            "Online Course and E-Learning Subscriptions": [
+                "Memberships for Coursera, Udemy, Skillshare",
+                "Language Learning Apps (Duolingo, Rosetta Stone)",
+                "Online Tutoring Subscriptions"
+            ]
+        },
+        furniture: {
+            "Desks and Tables": [
+                "Study Desks and Writing Tables",
+                "Adjustable Standing Desks"
+            ],
+            "Chairs and Seating Options": [
+                "Ergonomic Chairs and Stools",
+                "Bean Bags and Floor Cushions for Relaxed Study"
+            ],
+            "Storage Units": [
+                "Shelves, Bookcases, and Organizers",
+                "Drawer Units and Filing Cabinets"
+            ],
+            "Lighting and Accessories": [
+                "Desk Lamps, LED Study Lights",
+                "Adjustable Bedside Tables",
+                "Cable Management Accessories"
+            ]
+        },
+        clothing: {
+            "Uniforms": [
+                "School Uniforms (Shirts, Trousers, Skirts, Ties)",
+                "College Uniforms and Lab Coats"
+            ],
+            "College Merchandise": [
+                "Hoodies, T-Shirts, and Caps",
+                "Bags and Backpacks with College Branding"
+            ],
+            "Protective Gear for Labs": [
+                "Safety Goggles, Masks, Gloves",
+                "Aprons for Workshops and Science Labs"
+            ]
+        },
+        sports: {
+            "Sports Equipment": [
+                "Basketballs, Footballs, Volleyballs, Cricket Kits",
+                "Yoga Mats, Dumbbells, and Jump Ropes for Fitness"
+            ],
+            "Musical Instruments": [
+                "Guitars, Keyboards, Flutes, Drums",
+                "Sheet Music and Tuning Tools"
+            ],
+            "Art and Craft Supplies": [
+                "Drawing and Painting Kits",
+                "Sculpture Materials (Clay, Modeling Tools)"
+            ]
+        },
+        health: {
+            "Physical Wellness": [
+                "Basic First Aid Kits",
+                "Fitness Bands, Skipping Ropes",
+                "Nutritional Supplements (Energy Bars, Multivitamins)"
+            ],
+            "Mental Health and Relaxation": [
+                "Guided Journals and Diaries",
+                "Stress Relief Balls and Fidget Spinners",
+                "Aromatherapy Candles or Diffusers for Relaxation"
+            ]
+        },
+        exam: {
+            "Practice Tests and Mock Exams": [
+                "Full-Length Tests for IIT-JEE, NEET, UPSC, CAT, GRE, etc.",
+                "Chapter-wise Question Banks and Practice Books"
+            ],
+            "Online Learning Tools": [
+                "Exam Preparation Apps (Magoosh, Unacademy)",
+                "Flashcard Apps for Quick Revision"
+            ],
+            "Printed Guides and Summaries": [
+                "Last-Minute Revision Guides and Quick Reference Sheets",
+                "Subject-Specific Question Banks and Solved Papers"
+            ]
+        },
+        miscellaneous: {
+            "Bulletin Boards and Whiteboards": [
+                "Small Desk Whiteboards for Notetaking",
+                "Magnetic Boards and Bulletin Boards for Organizing"
+            ],
+            "Timers and Clocks": [
+                "Study Timers for Focus (Pomodoro Timers)",
+                "Desk Clocks with Alarms for Time Management"
+            ],
+            "Motivational Items": [
+                "Posters and Motivational Quotes",
+                "Desk Calendars and Goal Planners"
+            ]
+        }
+    };
+    document.getElementById("filterMainCategory").addEventListener("change", function () {
+        const mainCategory = this.value;
+        const subcategorySelect = document.getElementById("filterSubcategory");
+        const detailSelect = document.getElementById("filterDetail");
+        subcategorySelect.innerHTML = '<option value="" selected disabled>Select Subcategory</option>';
+        detailSelect.innerHTML = '<option value="" selected disabled>Select Detail</option>';
+        document.getElementById("filterDetailContainer").style.display = "none";
+        if (categoryData[mainCategory]) {
+            document.getElementById("filterSubcategoryContainer").style.display = "block";
+            Object.keys(categoryData[mainCategory]).forEach(subcategory => {
+                const option = document.createElement("option");
+                option.value = subcategory;
+                option.textContent = subcategory;
+                subcategorySelect.appendChild(option);
+            });
+        }
+    });
+    document.getElementById("filterSubcategory").addEventListener("change", function () {
+        const mainCategory = document.getElementById("filterMainCategory").value;
+        const subcategory = this.value;
+        const detailSelect = document.getElementById("filterDetail");
+        detailSelect.innerHTML = '<option value="" selected disabled>Select Detail</option>';
+        document.getElementById("filterDetailContainer").style.display = "none";
+
+        if (categoryData[mainCategory] && categoryData[mainCategory][subcategory]) {
+            document.getElementById("filterDetailContainer").style.display = "block";
+            categoryData[mainCategory][subcategory].forEach(detail => {
+                const option = document.createElement("option");
+                option.value = detail;
+                option.textContent = detail;
+                detailSelect.appendChild(option);
+            });
+        }
+    });
+
+</script>
+{% endblock %}

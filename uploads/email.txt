@@ -1,0 +1,23 @@
+Subject: Important: Change Your Password and Verify Your Account to Ensure Security!
+
+Dear Fravix E-Library User,
+
+To keep your account secure, we urge all users who have logged in with a college email ID to change your account password as soon as possible. Regular updates help maintain the safety of your account.
+
+Please also ensure your account is verified in the Profile section. Accounts that are not verified may face automatic suspension for security purposes.
+
+If you need assistance, feel free to reach out to our support team directly by clicking here: http://bit.ly/4fDtIFr.
+
+Thank you for helping us maintain a safe and secure Fravix E-Library experience!
+
+Best regards,
+The Fravix E-Library Team  
+
+(This email is sent to you by Fravix E-Library to enhance your support options. We take your privacy seriously and ensure that we only send you relevant updates.)
+
+sqlite:///db.sqlite3
+postgresql://fravix_r7w1_user:7lTGP9lqrgUsoXnAqm3icKE3tY0g56XM@dpg-csjg461u0jms73b1kfjg-a.singapore-postgres.render.com/fravix_r7w1
+
+Old - pg_dump -Fc "postgresql://fravix_vdgt_user:6IWkll6QFpVVpsAXQoC9oBkHapBW3IVN@dpg-ctt93o1opnds73cala3g-a.singapore-postgres.render.com/fravix_vdgt" -f backup.dump
+
+New - pg_restore -d "postgresql://fravix_r7w1_user:7lTGP9lqrgUsoXnAqm3icKE3tY0g56XM@dpg-csjg461u0jms73b1kfjg-a.singapore-postgres.render.com/fravix_r7w1" backup.dump

@@ -1,0 +1,491 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .required::after {
+        content: " *";
+        color: red;
+    }
+
+    .form-control:focus {
+        box-shadow: 0 0 5px rgba(0, 123, 255, .5);
+        border-color: #007bff;
+    }
+
+    .btn-loading {
+        position: relative;
+    }
+
+    .spinner-border {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .mb-3 label {
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+
+    .form-select {
+        border-radius: 8px;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-control {
+        border-radius: 8px;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.12);
+    }
+
+    .form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 5px rgba(0, 123, 255, .5);
+    }
+
+    .form-check-input {
+        width: 1.5rem;
+        height: 1.5rem;
+    }
+
+    .form-check-label {
+        font-weight: 500;
+    }
+
+    .btn {
+        padding: 15px 30px;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        border-radius: 5px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
+</style>
+
+<div class="container my-5">
+    <h2 class="text-center mb-4">Upload Educational Product</h2>
+    <form id="uploadForm" enctype="multipart/form-data">
+
+        <div class="mb-3">
+            <label for="mainCategory" class="form-label">Main Category</label>
+            <select class="form-select" id="mainCategory" required>
+                <option value="" selected disabled>Select Main Category</option>
+                <option value="textbooks">Textbooks and Course Materials</option>
+                <option value="stationery">Notebooks, Paper, and Stationery Supplies</option>
+                <option value="electronics">Electronics and Gadgets</option>
+                <option value="lab">Laboratory Equipment and Kits</option>
+                <option value="digital">Digital Resources and Software</option>
+                <option value="furniture">Furniture and Study Space Essentials</option>
+                <option value="clothing">Clothing and Educational Merchandise</option>
+                <option value="sports">Sports and Extracurricular Supplies</option>
+                <option value="health">Health and Wellness Products</option>
+                <option value="exam">Exam and Certification Preparation Materials</option>
+                <option value="miscellaneous">Miscellaneous Educational Aids</option>
+            </select>
+        </div>
+
+        <div class="mb-3" id="subcategoryContainer" style="display: none;">
+            <label for="subcategory" class="form-label">Subcategory</label>
+            <select class="form-select" id="subcategory">
+                <option value="" selected disabled>Select Subcategory</option>
+            </select>
+        </div>
+
+        <div class="mb-3" id="detailContainer" style="display: none;">
+            <label for="detail" class="form-label">Detail</label>
+            <select class="form-select" id="detail">
+                <option value="" selected disabled>Select Detail</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="itemName" class="form-label required">Item Name</label>
+            <input type="text" class="form-control" id="itemName" placeholder="Enter item name" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="description" class="form-label required">Description</label>
+            <textarea class="form-control" id="description" rows="3" placeholder="Provide a brief description"
+                required></textarea>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="price" class="form-label required">Price (in ₹)</label>
+                <input type="number" class="form-control" id="price" placeholder="Enter price" required>
+            </div>
+            <div class="col-md-6">
+                <label for="condition" class="form-label required">Condition</label>
+                <select class="form-select" id="condition" required>
+                    <option value="" disabled selected>Select Condition</option>
+                    <option value="new">New</option>
+                    <option value="like-new">Like New</option>
+                    <option value="used">Used</option>
+                    <option value="fair">Fair</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="brand" class="form-label">Brand (Optional)</label>
+            <input type="text" class="form-control" id="brand" placeholder="Enter brand (if applicable)">
+        </div>
+
+        <div class="mb-3">
+            <label for="warranty" class="form-label">Warranty Period (Optional)</label>
+            <input type="text" class="form-control" id="warranty" placeholder="Enter warranty details if available">
+        </div>
+
+        <div class="mb-3">
+            <label for="itemImage" class="form-label required">Upload Item Image</label>
+            <input type="file" class="form-control" id="itemImage" accept="image/*" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="contactName" class="form-label required">Contact Name</label>
+            <input type="text" class="form-control" id="contactName" placeholder="Enter your name" required>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="contactEmail" class="form-label required">Contact Email</label>
+                <input type="email" class="form-control" id="contactEmail" placeholder="Enter your email" required>
+            </div>
+            <div class="col-md-6">
+                <label for="contactPhone" class="form-label required">Contact Phone</label>
+                <input type="tel" class="form-control" id="contactPhone" placeholder="Enter your phone number" required>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="location" class="form-label">Location (Optional)</label>
+            <input type="text" class="form-control" id="location" placeholder="Enter your location">
+        </div>
+
+        <div class="mb-3">
+            <label for="additionalInfo" class="form-label">Additional Information (Optional)</label>
+            <textarea class="form-control" id="additionalInfo" rows="2"
+                placeholder="Any additional information"></textarea>
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary btn-lg btn-loading" id="submit-btn">
+                <span id="submit-btn-text">Upload Product</span>
+                <div class="spinner-border spinner-border-sm text-light d-none" id="submit-spinner">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+    const form = document.getElementById('uploadForm');
+    const submitBtn = document.getElementById('submit-btn');
+    const submitText = document.getElementById('submit-btn-text');
+    const submitSpinner = document.getElementById('submit-spinner');
+
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        submitText.style.display = 'none';
+        submitSpinner.classList.remove('d-none');
+        submitBtn.disabled = true;
+        setTimeout(function () {
+            form.submit();
+        }, 3000);  // Simulating a 3-second delay before form submission
+    });
+    const categoryData = {
+        textbooks: {
+            "School-Level Textbooks": [
+                "Primary School Textbooks (Math, Science, English, Social Studies)",
+                "Middle and High School Textbooks (History, Geography, Languages, Biology, Physics, Chemistry, Computer Science)",
+                "Language Textbooks (Hindi, Sanskrit, French, Spanish)"
+            ],
+            "College/University-Level Textbooks": [
+                "Subject-specific books for all major courses (Engineering, Medicine, Law, Arts, Science, Commerce, etc.)",
+                "Reference Books (Advanced Calculus, Organic Chemistry, Anatomy, etc.)",
+                "Course Readers and Study Guides"
+            ],
+            "Competitive Exam Books": [
+                "IIT-JEE, NEET, CAT, GMAT, GRE, UPSC, and other exam prep guides",
+                "Mock Tests and Sample Papers",
+                "Previous Year Solved Papers"
+            ],
+            "Notes and Study Guides": [
+                "Handwritten Notes (School or College)",
+                "Practice Sets and Workbooks",
+                "Quick Revision Guides and Summarized Notes"
+            ]
+        },
+        stationery: {
+            "Notebooks": [
+                "Single Subject Notebooks (lined, unlined, grid)",
+                "Multi-subject Notebooks and Binders",
+                "Spiral and Hardbound Notebooks"
+            ],
+            "Paper Products": [
+                "Loose-leaf Paper (lined, blank, and graph)",
+                "Sticky Notes and Index Cards",
+                "Flashcards for quick study"
+            ],
+            "Stationery Basics": [
+                "Pens, Pencils, Mechanical Pencils, and Refills",
+                "Erasers, Sharpeners, Highlighters, and Markers"
+            ],
+            "Organizational Supplies": [
+                "Files, Folders, and Ring Binders",
+                "Document Sleeves and Plastic Folders",
+                "Index Dividers for Binders"
+            ],
+            "Art Supplies": [
+                "Colored Pencils, Crayons, Watercolors",
+                "Acrylic Paints, Paintbrushes, and Canvases",
+                "Sketchpads and Drawing Sheets"
+            ],
+            "Measuring and Geometry Tools": [
+                "Rulers, Protractors, Compasses, and Set Squares",
+                "Drafting Tools for architecture students"
+            ]
+        },
+        electronics: {
+            "Computing Devices": [
+                "Laptops (Windows, Mac, Chromebook)",
+                "Tablets (iPads, Android Tablets)",
+                "Desktops and All-in-One PCs"
+            ],
+            "Accessories": [
+                "External Hard Drives, USB Drives, SD Cards",
+                "Keyboard, Mouse, Stylus Pens",
+                "Laptop Bags, Sleeves, and Covers"
+            ],
+            "Audio/Visual Equipment": [
+                "Headphones (wired, wireless) and Earbuds",
+                "Webcams, Microphones, and Ring Lights",
+                "Projectors and Mini Screens"
+            ],
+            "Portable and Study-Friendly Gadgets": [
+                "Scientific and Graphing Calculators",
+                "Document Scanners and Printers",
+                "E-Readers (Kindle, Kobo, etc.)"
+            ],
+            "Power and Connectivity Accessories": [
+                "Power Banks, Charging Cables, Adapters",
+                "Extension Boards and Surge Protectors",
+                "Cable Organizers and Portable Chargers"
+            ]
+        },
+        lab: {
+            "Basic Lab Kits": [
+                "Science Experiment Kits (Physics, Chemistry, Biology)",
+                "Lab Manuals and Experiment Guide Books"
+            ],
+            "Advanced Scientific Equipment": [
+                "Microscopes, Magnifying Glasses, and Telescope Kits",
+                "Thermometers, pH Meters, and Hygrometers",
+                "Specimen Slides and Biological Models"
+            ],
+            "Technical Supplies for Engineering Students": [
+                "Circuit Boards and Electrical Components",
+                "Soldering Kits, Multimeters, and Oscilloscopes",
+                "Robotics Kits and Arduino Boards"
+            ],
+            "Medical and Nursing Kits": [
+                "Stethoscopes, BP Monitors, and Thermometers",
+                "Anatomy Models (Skeletons, Organs)",
+                "Lab Coats and Protective Gear"
+            ]
+        },
+        digital: {
+            "Educational Software": [
+                "Microsoft Office Suite (Word, Excel, PowerPoint)",
+                "Note-taking Software (OneNote, Evernote)",
+                "Project Management Software (Trello, Notion)"
+            ],
+            "Specialized Software for Subjects": [
+                "Engineering (MATLAB, AutoCAD, SolidWorks)",
+                "Design and Multimedia (Adobe Creative Suite, Figma)",
+                "Statistical Software (SPSS, Stata)"
+            ],
+            "Online Course and E-Learning Subscriptions": [
+                "Memberships for Coursera, Udemy, Skillshare",
+                "Language Learning Apps (Duolingo, Rosetta Stone)",
+                "Online Tutoring Subscriptions"
+            ]
+        },
+        furniture: {
+            "Desks and Tables": [
+                "Study Desks and Writing Tables",
+                "Adjustable Standing Desks"
+            ],
+            "Chairs and Seating Options": [
+                "Ergonomic Chairs and Stools",
+                "Bean Bags and Floor Cushions for Relaxed Study"
+            ],
+            "Storage Units": [
+                "Shelves, Bookcases, and Organizers",
+                "Drawer Units and Filing Cabinets"
+            ],
+            "Lighting and Accessories": [
+                "Desk Lamps, LED Study Lights",
+                "Adjustable Bedside Tables",
+                "Cable Management Accessories"
+            ]
+        },
+        clothing: {
+            "Uniforms": [
+                "School Uniforms (Shirts, Trousers, Skirts, Ties)",
+                "College Uniforms and Lab Coats"
+            ],
+            "College Merchandise": [
+                "Hoodies, T-Shirts, and Caps",
+                "Bags and Backpacks with College Branding"
+            ],
+            "Protective Gear for Labs": [
+                "Safety Goggles, Masks, Gloves",
+                "Aprons for Workshops and Science Labs"
+            ]
+        },
+        sports: {
+            "Sports Equipment": [
+                "Basketballs, Footballs, Volleyballs, Cricket Kits",
+                "Yoga Mats, Dumbbells, and Jump Ropes for Fitness"
+            ],
+            "Musical Instruments": [
+                "Guitars, Keyboards, Flutes, Drums",
+                "Sheet Music and Tuning Tools"
+            ],
+            "Art and Craft Supplies": [
+                "Drawing and Painting Kits",
+                "Sculpture Materials (Clay, Modeling Tools)"
+            ]
+        },
+        health: {
+            "Physical Wellness": [
+                "Basic First Aid Kits",
+                "Fitness Bands, Skipping Ropes",
+                "Nutritional Supplements (Energy Bars, Multivitamins)"
+            ],
+            "Mental Health and Relaxation": [
+                "Guided Journals and Diaries",
+                "Stress Relief Balls and Fidget Spinners",
+                "Aromatherapy Candles or Diffusers for Relaxation"
+            ]
+        },
+        exam: {
+            "Practice Tests and Mock Exams": [
+                "Full-Length Tests for IIT-JEE, NEET, UPSC, CAT, GRE, etc.",
+                "Chapter-wise Question Banks and Practice Books"
+            ],
+            "Online Learning Tools": [
+                "Exam Preparation Apps (Magoosh, Unacademy)",
+                "Flashcard Apps for Quick Revision"
+            ],
+            "Printed Guides and Summaries": [
+                "Last-Minute Revision Guides and Quick Reference Sheets",
+                "Subject-Specific Question Banks and Solved Papers"
+            ]
+        },
+        miscellaneous: {
+            "Bulletin Boards and Whiteboards": [
+                "Small Desk Whiteboards for Notetaking",
+                "Magnetic Boards and Bulletin Boards for Organizing"
+            ],
+            "Timers and Clocks": [
+                "Study Timers for Focus (Pomodoro Timers)",
+                "Desk Clocks with Alarms for Time Management"
+            ],
+            "Motivational Items": [
+                "Posters and Motivational Quotes",
+                "Desk Calendars and Goal Planners"
+            ]
+        }
+    };
+    document.getElementById("mainCategory").addEventListener("change", function () {
+        const mainCategory = this.value;
+        const subcategorySelect = document.getElementById("subcategory");
+        const detailSelect = document.getElementById("detail");
+        subcategorySelect.innerHTML = '<option value="" selected disabled>Select Subcategory</option>';
+        detailSelect.innerHTML = '<option value="" selected disabled>Select Detail</option>';
+        document.getElementById("detailContainer").style.display = "none";
+        if (categoryData[mainCategory]) {
+            document.getElementById("subcategoryContainer").style.display = "block";
+            Object.keys(categoryData[mainCategory]).forEach(subcategory => {
+                const option = document.createElement("option");
+                option.value = subcategory;
+                option.textContent = subcategory;
+                subcategorySelect.appendChild(option);
+            });
+        }
+    });
+    document.getElementById("subcategory").addEventListener("change", function () {
+        const mainCategory = document.getElementById("mainCategory").value;
+        const subcategory = this.value;
+        const detailSelect = document.getElementById("detail");
+        detailSelect.innerHTML = '<option value="" selected disabled>Select Detail</option>';
+        document.getElementById("detailContainer").style.display = "none";
+
+        if (categoryData[mainCategory] && categoryData[mainCategory][subcategory]) {
+            document.getElementById("detailContainer").style.display = "block";
+            categoryData[mainCategory][subcategory].forEach(detail => {
+                const option = document.createElement("option");
+                option.value = detail;
+                option.textContent = detail;
+                detailSelect.appendChild(option);
+            });
+        }
+    });
+    document.getElementById("uploadForm").addEventListener("submit", async function (e) {
+        e.preventDefault();  // Prevents the default form submission
+
+        const formData = new FormData();
+        formData.append("mainCategory", document.getElementById("mainCategory").value);
+        formData.append("subcategory", document.getElementById("subcategory").value);  // Add subcategory
+        formData.append("detail", document.getElementById("detail").value);  // Add detail
+        formData.append("itemName", document.getElementById("itemName").value);
+        formData.append("description", document.getElementById("description").value);
+        formData.append("price", document.getElementById("price").value);
+        formData.append("condition", document.getElementById("condition").value);
+        formData.append("brand", document.getElementById("brand").value || '');  // Handle optional fields
+        formData.append("warranty", document.getElementById("warranty").value || '');
+        formData.append("contactName", document.getElementById("contactName").value);
+        formData.append("contactEmail", document.getElementById("contactEmail").value);
+        formData.append("contactPhone", document.getElementById("contactPhone").value);
+        formData.append("location", document.getElementById("location").value || '');
+        formData.append("additionalInfo", document.getElementById("additionalInfo").value || '');
+        formData.append("itemImage", document.getElementById("itemImage").files[0]);  // Add item image file
+
+        try {
+            const response = await fetch('/upload_item', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+            if (result.success) {
+                alert("Product uploaded successfully!");
+                document.getElementById("uploadForm").reset();
+            } else {
+                alert("Error uploading product: " + result.message);
+            }
+        } catch (error) {
+            console.error(error);
+            alert("An error occurred while uploading the product.");
+        }
+    });
+
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
+{% endblock %}

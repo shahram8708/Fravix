@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Edit Profile</h2>
+
+    <form method="POST" onsubmit="submitForm()">
+        <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}"
+                placeholder="Enter your username" required>
+            <small class="form-text text-muted">Your unique username to identify you on the platform.</small>
+        </div>
+        <!-- <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}"
+                placeholder="Enter your email" required>
+            <small class="form-text text-muted">This will be your contact email.</small>
+        </div> -->
+        <div class="mb-3">
+            <label for="college" class="form-label">School/College Name</label>
+            <input type="text" class="form-control" id="college" name="college"
+                value="{{ user.college if user.college else '' }}" placeholder="Enter your college name" required>
+            <small class="form-text text-muted">Please enter the full name of your school/college.</small>
+        </div>
+        <div class="mb-3">
+            <label for="branch" class="form-label">Class/Branch/Course Name</label>
+            <input type="text" class="form-control" id="branch" name="branch"
+                value="{{ user.branch if user.branch else '' }}" placeholder="Enter your branch or course name"
+                required>
+            <small class="form-text text-muted">Specify your field of study or major.</small>
+        </div>
+        <div class="mb-3">
+            <label for="bio" class="form-label">Bio</label>
+            <textarea class="form-control" id="bio" name="bio" rows="3" placeholder="Write a brief bio about yourself"
+                required>{{ user.bio if user.bio else '' }}</textarea>
+            <small class="form-text text-muted">Share a few sentences about yourself.</small>
+        </div>
+        <!-- <div class="mb-3">
+            <label class="form-label">Are you an Admin?</label>
+            <div>
+                <input type="radio" id="admin_yes" name="is_admin" value="yes" 
+                       {% if user.is_admin %}checked{% endif %}>
+                <label for="admin_yes">Yes</label>
+        
+                <input type="radio" id="admin_no" name="is_admin" value="no" 
+                       {% if not user.is_admin %}checked{% endif %}>
+                <label for="admin_no">No</label>
+            </div>
+            <small class="form-text text-muted">Select "Yes" if you have admin privileges.</small>
+        </div> -->
+
+        <button id="submitBtn" type="submit" class="btn btn-success">
+            Update Profile
+            <span id="spinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
+                style="display:none;"></span>
+        </button>
+        <a href="{{ url_for('profile', user_id=user.id) }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+<script>
+    function submitForm() {
+        const submitBtn = document.getElementById('submitBtn');
+        const spinner = document.getElementById('spinner');
+        submitBtn.disabled = true;
+        spinner.style.display = 'inline-block';
+    }
+</script>
+{% endblock %}

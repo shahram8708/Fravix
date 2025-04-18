@@ -1,0 +1,642 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Upload New Resource</h2>
+    <form id="uploadForm" method="POST" action="{{ url_for('upload') }}" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label class="form-label">Select Material Type</label><br>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" id="gtuMaterial" name="material_type_option" value="gtu"
+                    onchange="toggleMaterialOptions()">
+                <label class="form-check-label" for="gtuMaterial">
+                    GTU Engineering Material - This options are pre-defined. Please select this option if you are
+                    uploading GTU Engineering material.
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" id="withoutGtuMaterial" name="material_type_option"
+                    value="without" onchange="toggleMaterialOptions()">
+                <label class="form-check-label" for="withoutGtuMaterial">
+                    Without GTU Engineering Material - If you are uploading materials that are not related to GTU
+                    Engineering Material, please select this option. This includes other classes and courses.
+                </label>
+            </div>
+        </div>
+
+        <div class="mb-3" id="class-container" style="display:none;">
+            <label for="class" class="form-label">Select Class/Year (1-12/1-4)</label>
+            <select class="form-select" id="class" name="class_year" required>
+                <option value="">Select Class/Year</option>
+                <option value="1 Class">1st</option>
+                <option value="2 Class">2nd</option>
+                <option value="3 Class">3rd</option>
+                <option value="4 Class">4th</option>
+                <option value="5 Class">5th</option>
+                <option value="6 Class">6th</option>
+                <option value="7 Class">7th</option>
+                <option value="8 Class">8th</option>
+                <option value="9 Class">9th</option>
+                <option value="10 Class">10th</option>
+                <option value="11 Class">11th</option>
+                <option value="12 Class">12th</option>
+                <option value="1 Year">1st Year</option>
+                <option value="2 Year">2nd Year</option>
+                <option value="3 Year">3rd Year</option>
+                <option value="4 Year">4th Year</option>
+            </select>
+        </div>
+
+        <div class="mb-3" id="manual-subject-container" style="display:none;">
+            <label for="manual_subject" class="form-label">Enter Subject</label>
+            <input type="text" class="form-control" id="manual_subject" name="class_subject"
+                placeholder="Type your subject" required>
+        </div>
+
+        <div class="mb-3" id="yearss">
+            <label for="year" id="years" class="form-label">Select Year</label>
+            <select class="form-select" id="year" name="year" required>
+                <option value="">Select Year</option>
+                <option value="1 Year">1st Year</option>
+                <option value="2 Year">2nd Year</option>
+                <option value="3 Year">3rd Year</option>
+                <option value="4 Year">4th Year</option>
+            </select>
+        </div>
+
+        <div class="mb-3" id="subject-container" style="display:none;">
+            <label for="subjectSearch" class="form-label">Search Subject</label>
+            <input type="text" class="form-control" id="subjectSearch" placeholder="Type to search subjects">
+            <label for="subject" class="form-label mt-2">Select Subject</label>
+            <select class="form-select" id="subject" name="subject" required>
+                <option value="">Select Subject</option>
+            </select>
+        </div>
+
+        <div class="mb-3" id="material-type-container" style="display:none;">
+            <label for="material_type" class="form-label">Select Material Type</label>
+            <select class="form-select" id="material_type" name="material_type" required>
+                <option value="">Select Material Type</option>
+                <option value="Assignment">Assignment Paper</option>
+                <option value="Book">Book</option>
+                <option value="Case Study">Case Study</option>
+                <option value="Dissertation">Dissertation</option>
+                <option value="E-book">E-book</option>
+                <option value="Internship Report">Internship Report</option>
+                <option value="Lab Manual">Lab Manual</option>
+                <option value="Lecture Notes">Lecture Notes</option>
+                <option value="Model Paper">Model Paper</option>
+                <option value="Notes">Notes</option>
+                <option value="Previous Year Question Paper">Previous Year Question Paper</option>
+                <option value="Previous Year Solutions">Previous Year Solutions</option>
+                <option value="Project Report">Project Report</option>
+                <option value="Question Bank">Question Bank</option>
+                <option value="Research Paper">Research Paper</option>
+                <option value="Revision Notes">Revision Notes</option>
+                <option value="Sample Paper">Sample Paper</option>
+                <option value="Study Material">Study Material</option>
+                <option value="Syllabus">Syllabus</option>
+                <option value="Tutorial">Tutorial</option>
+                <option value="Video Lecture">Video Lecture</option>
+                <option value="Workshop Material">Workshop Material</option>
+                <option value="White Paper">White Paper</option>
+                <option value="Online Course Material">Online Course Material</option>
+                <option value="Research Proposal">Research Proposal</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+
+        <div class="mb-3" id="descriptions">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="5" required
+                placeholder="Please provide a brief description of the material. Include the title, relevant chapters, and any key details that help users understand the content."></textarea>
+            <small class="form-text text-muted">Example: "This material covers Chapter 1: Introduction to Programming.
+                It includes topics on variables, data types, and basic syntax."</small>
+        </div>
+
+        <div class="mb-3" id="upload_options">
+            <label for="upload_option" class="form-label">Upload Option</label>
+            <select class="form-select" id="upload_option" name="upload_option" required>
+                <option value="">Select Option</option>
+                <option value="file">Upload File</option>
+                <option value="url">Provide URL</option>
+            </select>
+        </div>
+
+        <div class="mb-3" id="file-input-container" style="display:none;">
+            <label for="file" class="form-label">Upload File (Max 1MB)</label>
+            <input type="file" class="form-control" id="file" name="file" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt">
+            <small class="form-text text-danger" id="fileError" style="display:none;">File must be smaller than 1MB. If
+                your file is larger than 1MB, please upload it to Google Drive or another service and provide the public
+                link in Resource URL.</small>
+        </div>
+
+        <div class="mb-3" id="url-input-container" style="display:none;">
+            <label for="url" class="form-label">Resource URL</label>
+            <input type="url" class="form-control" id="url" name="url" placeholder="Enter resource URL">
+            <small class="form-text text-muted">If your file is larger than 1MB, please upload it to Google Drive or
+                another service and provide the public link here.</small>
+        </div>
+
+        <div class="mb-3 d-flex align-items-center">
+            <button type="submit" class="btn btn-primary me-2" id="uploadButton">Upload</button>
+            <button type="reset" class="btn btn-secondary" id="reset-button">Reset</button>
+            <div id="loadingIndicator" class="spinner-border text-primary ms-3" role="status" style="display: none;">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    function toggleMaterialOptions() {
+        const gtuMaterial = document.getElementById('gtuMaterial').checked;
+        const withoutGtuMaterial = document.getElementById('withoutGtuMaterial').checked;
+
+        document.getElementById('class-container').style.display = 'none';
+        document.getElementById('manual-subject-container').style.display = 'none';
+        document.getElementById('subject-container').style.display = 'none';
+        document.getElementById('material-type-container').style.display = 'none';
+        document.getElementById('descriptions').style.display = 'none';
+        document.getElementById('upload_options').style.display = 'none';
+        document.getElementById('file-input-container').style.display = 'none';
+        document.getElementById('url-input-container').style.display = 'none';
+        document.getElementById('yearss').style.display = 'none';
+
+        document.getElementById('uploadButton').style.display = 'none';
+        document.getElementById('reset-button').style.display = 'none';
+
+        if (gtuMaterial) {
+            document.getElementById('year').style.display = 'block';
+            document.getElementById('subject-container').style.display = 'block';
+            document.getElementById('material-type-container').style.display = 'block';
+            document.getElementById('descriptions').style.display = 'block';
+            document.getElementById('upload_options').style.display = 'block';
+            document.getElementById('yearss').style.display = 'block';
+
+            document.getElementById('year').required = true;
+            document.getElementById('subject').required = true;
+
+            document.getElementById('uploadButton').style.display = 'inline-block';
+            document.getElementById('reset-button').style.display = 'inline-block';
+
+            document.getElementById('class').required = false;
+            document.getElementById('manual_subject').required = false;
+
+        }
+
+        if (withoutGtuMaterial) {
+            document.getElementById('class-container').style.display = 'block';
+            document.getElementById('manual-subject-container').style.display = 'block';
+            document.getElementById('material-type-container').style.display = 'block';
+            document.getElementById('descriptions').style.display = 'block';
+            document.getElementById('upload_options').style.display = 'block';
+
+            document.getElementById('class').required = true;
+            document.getElementById('manual_subject').required = true;
+
+            document.getElementById('uploadButton').style.display = 'inline-block';
+            document.getElementById('reset-button').style.display = 'inline-block';
+
+            document.getElementById('year').required = false;
+            document.getElementById('subject').required = false;
+
+            document.getElementById('year').style.display = 'none';
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        toggleMaterialOptions();
+        document.getElementById('year').required = false;
+        document.getElementById('subject').required = false;
+        document.getElementById('class').required = false;
+        document.getElementById('manual_subject').required = false;
+    });
+
+    const subjectsByYear = {
+        '1 Year': [
+            'Basic Civil Engineering',
+            'Basic Electrical Engineering',
+            'Basic Electronics',
+            'Basic Mechanical Engineering',
+            'Chemistry',
+            'Engineering Graphics & Design',
+            'Environmental Sciences',
+            'English',
+            'Induction Program',
+            'Mathematics - 1',
+            'Mathematics - 2',
+            'Physics Group 1',
+            'Physics Group 2',
+            'Programming for Problem Solving',
+            'Workshop/ Manufacturing Practices',
+            'Universal Human Values'
+        ],
+        '2 Year': [
+            "Analog & Digital Circuits",
+            "Analog & Digital Electronics",
+            "Analog Circuit Design",
+            "Applied Chemistry",
+            "Applied Mathematics for Electrical Engineering",
+            "Building and Town Planning",
+            "Building Construction Technology",
+            "Chemical Engineering Thermodynamics I",
+            "Chemical Engineering Thermodynamics II",
+            "Circuit Theory",
+            "Civil Engineering - Societal & Global Impact",
+            "Complex Variables and Partial Differential Equations",
+            "Computer Organization & Architecture",
+            "Control System Theory",
+            "Control Systems",
+            "Control Theory",
+            "Data Communication & Computer Networks",
+            "Data Structures",
+            "Database Management Systems",
+            "Design Engineering - I A",
+            "Design Engineering 1 B",
+            "Digital Electronics",
+            "Digital System Design",
+            "Discrete Mathematics",
+            "Economics for Engineers",
+            "Effective Technical Communication",
+            "Electrical Circuit Analysis",
+            "Electrical Machines and Applications",
+            "Electrical Machine- I",
+            "Electromagnetic Fields",
+            "Electromagnetic Theory",
+            "Electronic Measurement Laboratory",
+            "Engineering Thermodynamics",
+            "Fluid Flow Operations",
+            "Fluid Mechanics & Hydraulics",
+            "Fluid Mechanics and Hydraulics Machines",
+            "Fundamentals of Machine Design",
+            "Geotechnical Engineering",
+            "Heat Transfer",
+            "Indian Constitution",
+            "Kinematics and Theory of Machines",
+            "Manufacturing Processes",
+            "Material & Energy Balance Computation",
+            "Material Science and Metallurgy",
+            "Measurement & Instrumentation",
+            "Measurement and Instruments",
+            "Mechanics of Solids",
+            "Microprocessor & Microcontroller",
+            "Microprocessor and Interfacing",
+            "Numerical Methods in Chemical Engineering",
+            "Object Oriented Programming -I",
+            "Operating System",
+            "Operating System and Virtualization",
+            "Organisational Behaviour",
+            "Pollution Control & Safety Management",
+            "Principle of Measurement Science",
+            "Principles of Economics and Management",
+            "Professional Ethics",
+            "Probability and Statistics",
+            "Signal & Systems",
+            "Structural Analysis-I",
+            "Surveying",
+            "Thermodynamics I",
+            "Unit Processes & Chemical Technology",
+            "Workshop/ Manufacturing Practices"
+        ],
+        '3 Year': [
+            'Advanced Electrical Machines',
+            'Advanced Java Programming',
+            'Advanced Manufacturing Processes',
+            'Advance Microcontroller',
+            'Artificial Intelligence',
+            'Artificial Intelligence and Machine Learning',
+            'Big Data Analytics',
+            'Basics of Industrial Engineering',
+            'Biomedical Instrumentation',
+            'Building Automation',
+            'Chemical Process Plant Design & Economics',
+            'Construction Equipment and Automation',
+            'Contributor Personality Development Program',
+            'Control Engineering',
+            'Control System Design',
+            'Cryptography and Network Security',
+            'Cyber Crime and Mitigation',
+            'Cyber Laws and Ethics',
+            'Cyber Physical Systems',
+            'Cyber Security',
+            'Data Analysis and Visualization',
+            'Data Mining',
+            'Data Mining and Business Intelligence',
+            'Data Science',
+            'Data Visualization',
+            'Design Engineering - II A',
+            'Design Engineering II B',
+            'Design of Heat Exchangers',
+            'Design of Reinforced Concrete Structures',
+            'Digital Signal Processing',
+            'Digital Signal Processing for Power Electronics',
+            'Distributed Computing',
+            'Disaster Management',
+            'Earthquake Engineering',
+            'Electrical Machine- II',
+            'Electrical Materials',
+            'Electrical Measurement and Measuring Instruments',
+            'Electrical Power Utilization & Traction',
+            'Electric Drives',
+            'Element of Electrical Design',
+            'Embedded Systems',
+            'Embedded Systems for Power Electronics',
+            'Energy Technology',
+            'Entrepreneurship and E-business',
+            'Environmental Engineering',
+            'Environmental Instrumentation',
+            'Fiber Optic Communication',
+            'Fuels and Combustion',
+            'Gas Dynamics',
+            'Heat Transfer',
+            'HVDC Transmission Systems',
+            'Industrial Automation',
+            'Industrial Communication Systems',
+            'Industrial Electronics',
+            'Industrial Safety and Maintenance Engineering',
+            'Instrumentation and Sensors',
+            'Instrumentation Project Management',
+            'IOT and Applications',
+            'Image Processing',
+            'Machine Tool Design',
+            'Mass Transfer Operations I',
+            'Mass Transfer Operations II',
+            'Measurement in Industry',
+            'Microcontroller and Interfacing',
+            'Microprocessors and Microcontrollers',
+            'Microprocessors Architecture, Interfacing and Applications',
+            'Motion Control',
+            'Numerical Methods for Engineers',
+            'Non Destructive Testing',
+            'Object Oriented Analysis and Design',
+            'Open Channel Flow',
+            'Optical Communication',
+            'Operation Research',
+            'Particle and Fluid Particle Processing',
+            'Pavement Design and Highway Construction',
+            'Pipeline Engineering',
+            'Power Electronics',
+            'Power Electronics Circuits - I',
+            'Power Electronics Circuits - II',
+            'Power Electronics in Consumer Products',
+            'Power System- II',
+            'Principles of Management',
+            'Principles of Power Supply',
+            'Professional Core',
+            'Professional Elective - I',
+            'Programming for Problem Solving',
+            'Product Development and Entrepreneurship',
+            'Python Programming',
+            'Python Programming (Power Electronics)',
+            'Python for Data Science',
+            'Remote Sensing and GIS',
+            'Robotics',
+            'Robotics and Automation',
+            'Safety Instrumented System',
+            'Satellite Communication',
+            'Signals and Systems',
+            'Sensors and Transducers',
+            'Software Engineering',
+            'Solid Waste Management',
+            'Structural Analysis-II',
+            'System Software',
+            'Systems Engineering',
+            'Traffic Engineering and Management',
+            'Tribology and Terotechnology',
+            'Transportation Engineering',
+            'Urban Transportation Planning',
+            'VLSI Design',
+            'Web Development',
+            'Web Programming',
+            'Web Technology',
+            'Wind And Solar Energy',
+            'Artificial Intelligence and Machine Learning',
+            'Computer Aided Design',
+            'Computer Aided Manufacturing',
+            'Cyber Crime and Mitigation',
+            'Data Analysis and Visualization',
+            'Design Engineering II B',
+            'Digital Signal Processing',
+            'Distributed Computing',
+            'Engineering Electromagnetics and Wave Propagation',
+            'IT Infrastructure and Utilities',
+            'Microprocessor and Microcontroller',
+            'Optical Communication',
+            'Theory of Computation'
+        ],
+        '4 Year': [
+            'AC Machine Design',
+            'Advanced Electric Drives',
+            'Advanced Heat Transfer',
+            'Advanced Industrial Drives',
+            'Advanced Machine Design',
+            'Advanced Microcontrollers',
+            'Advanced Power Converters',
+            'Advanced Power Electronics',
+            'Advanced Power Electronics Devices and Interface Circuits',
+            'AI and Machine Learning',
+            'AI and Machine Learning in Power Electronics',
+            'Applied Machine Learning',
+            'Application of GIS in Civil Engineering',
+            'Artificial Intelligence',
+            'Automotive Electronics',
+            'Automotive Instrumentation',
+            'Automation in Manufacturing',
+            'Big Data Analytics',
+            'Biochemical Engineering',
+            'Biomedical Electronics',
+            'Blockchain',
+            'Building Automation',
+            'Cloud Computing',
+            'Compiler Design',
+            'Construction Engineering and Management',
+            'Control Engineering',
+            'Cryogenics Engineering',
+            'Data Compression',
+            'Data Science',
+            'Digital Forensics',
+            'Digital Image and Video Processing',
+            'Digital Signal Controllers',
+            'Digital Signal Processing',
+            'Digital Signal Processing (IC) (Professional Core)',
+            'Distributed System',
+            'Distributed Computing',
+            'Environmental Impact Assessment',
+            'Environmental Engineering',
+            'Finite Element Methods',
+            'FPGA in Power Electronics Applications',
+            'Fuels and Combustion',
+            'Graph Theory and Combinatorics',
+            'Green Built Environment',
+            'High Voltage Engineering',
+            'Irrigation Engineering',
+            'Industrial Automation',
+            'Industrial Drives and Control',
+            'Industrial Electrical Systems',
+            'Industrial Internet of Things',
+            'Industrial Safety',
+            'Information Retrieval',
+            'Information Security',
+            'Integrated Personality Development Course',
+            'Internet of Things',
+            'Internet of Things in Power Electronics Applications',
+            'IoT and Its Applications',
+            'Machine Learning',
+            'Mechanical Design of Process Equipments',
+            'Metal Forming Analysis',
+            'Microcontroller and Interfacing',
+            'Microwave Theory and Techniques',
+            'Mobile Application Development',
+            'Mobile Computing and Wireless Communication',
+            'Natural Language Processing',
+            'Nanoscience and Technology',
+            'Nanotechnology and Surface Engineering',
+            'Parallel and Distributed Computing',
+            'Pattern Recognition',
+            'Piping Design',
+            'Power Electronics',
+            'Power Electronics for Power System Applications',
+            'Power Quality',
+            'Power Quality and FACTS',
+            'Power System Dynamics and Control',
+            'Power System Operation and Control',
+            'Power Plant Engineering',
+            'Power Plant Instrumentation',
+            'Process Auxiliaries and Utilities',
+            'Process Equipment Design',
+            'Process Intensification',
+            'Process Modelling, Simulation and Optimization',
+            'Process Dynamics and Control (Professional Elective - IV)',
+            'Project Management (Professional Elective - VI)',
+            'Quality and Reliability Engineering (Professional Elective - VI)',
+            'Radar and Navigational Aids',
+            'Refrigeration and Air Conditioning',
+            'Retrofitting of Structures',
+            'Robotic Engineering',
+            'Software Project Management',
+            'Software Engineering',
+            'Satellite Communication and Networking (Professional Elective - VI)',
+            'Smart Grids',
+            'Testing and Verification',
+            'Telecommunication Engineering (Professional Core)',
+            'Transport Phenomena',
+            'Turbo Machines (Professional Elective - VI)',
+            'Virtual and Augmented Reality',
+            'Virtual Reality (Open Elective - III',
+            'VLSI Design',
+            'Wireless Communication',
+            'Wireless Sensor Networks',
+            'Summer Internship',
+            'AI and Machine Learning',
+            'Artificial Intelligence',
+            'Cloud Computing',
+            'Compiler Design',
+            'Digital Forensics',
+            'Distributed Computing',
+            'Machine Learning',
+            'Mobile Computing and Wireless Communication',
+            'Natural Language Processing',
+            'Software Project Management',
+            'Wireless Sensor Networks'
+        ]
+    };
+
+    document.getElementById('subjectSearch').addEventListener('input', function () {
+        const searchTerm = this.value.toLowerCase();
+        const subjectSelect = document.getElementById('subject');
+
+        subjectSelect.innerHTML = '<option value="">Select Subject</option>';
+
+        if (searchTerm) {
+            const filteredSubjects = subjectsByYear[document.getElementById('year').value].filter(subject =>
+                subject.toLowerCase().includes(searchTerm)
+            );
+
+            for (const subject of filteredSubjects) {
+                const option = document.createElement('option');
+                option.value = subject;
+                option.textContent = subject;
+                subjectSelect.appendChild(option);
+            }
+        } else {
+            for (const subject of subjectsByYear[document.getElementById('year').value]) {
+                const option = document.createElement('option');
+                option.value = subject;
+                option.textContent = subject;
+                subjectSelect.appendChild(option);
+            }
+        }
+    });
+
+    document.getElementById('year').addEventListener('change', function () {
+        const year = this.value;
+        const subjectSelect = document.getElementById('subject');
+        subjectSelect.innerHTML = '<option value="">Select Subject</option>';
+
+        if (year && subjectsByYear[year]) {
+            for (const subject of subjectsByYear[year]) {
+                const option = document.createElement('option');
+                option.value = subject;
+                option.textContent = subject;
+                subjectSelect.appendChild(option);
+            }
+        }
+    });
+
+    document.getElementById('subject').addEventListener('change', function () {
+        document.getElementById('material-type-container').style.display = this.value ? 'block' : 'none';
+    });
+
+    document.getElementById('upload_option').addEventListener('change', function () {
+        const uploadOption = this.value;
+
+        if (uploadOption === 'file') {
+            document.getElementById('file-input-container').style.display = 'block';
+            document.getElementById('url-input-container').style.display = 'none';
+            document.getElementById('file').required = true;
+            document.getElementById('url').required = false;
+        } else if (uploadOption === 'url') {
+            document.getElementById('file-input-container').style.display = 'none';
+            document.getElementById('url-input-container').style.display = 'block';
+            document.getElementById('file').required = false;
+            document.getElementById('url').required = true;
+        } else {
+            document.getElementById('file-input-container').style.display = 'none';
+            document.getElementById('url-input-container').style.display = 'none';
+            document.getElementById('file').required = false;
+            document.getElementById('url').required = false;
+        }
+    });
+
+    document.getElementById('reset-button').addEventListener('click', function () {
+        document.getElementById('subject-container').style.display = 'none';
+        document.getElementById('material-type-container').style.display = 'none';
+        document.getElementById('file-input-container').style.display = 'none';
+        document.getElementById('url-input-container').style.display = 'none';
+        document.getElementById('file').required = false;
+        document.getElementById('url').required = false;
+        document.getElementById('fileError').style.display = 'none';
+    });
+
+    document.getElementById('file').addEventListener('change', function () {
+        const file = this.files[0];
+        const fileError = document.getElementById('fileError');
+
+        if (file && file.size > 1048576) {
+            fileError.style.display = 'block';
+            this.value = '';
+        } else {
+            fileError.style.display = 'none';
+        }
+    });
+
+    document.getElementById('uploadForm').onsubmit = function () {
+        const uploadButton = document.getElementById('uploadButton');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+
+        uploadButton.disabled = true;
+        loadingIndicator.style.display = "inline-block";
+    };
+</script>
+{% endblock %}

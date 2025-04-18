@@ -1,0 +1,232 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg rounded">
+        <div class="card-header text-center bg-primary text-white">
+            <h3>Edit Product: {{ product.item_name }}</h3>
+        </div>
+        <div class="card-body">
+            <form action="{{ url_for('edit_product', product_id=product.id) }}" method="post"
+                enctype="multipart/form-data" id="edit-product-form">
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="form-group">
+                            <label for="itemName" class="form-label">Item Name:</label>
+                            <input type="text" class="form-control" id="itemName" name="itemName"
+                                value="{{ product.item_name }}" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="form-group">
+                            <label for="description" class="form-label">Description:</label>
+                            <textarea class="form-control" id="description" name="description" rows="3"
+                                required>{{ product.description }}</textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="form-group">
+                            <label for="price" class="form-label">Price (in ₹):</label>
+                            <input type="number" class="form-control" id="price" name="price"
+                                value="{{ product.price }}" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="form-group">
+                            <label for="condition" class="form-label">Condition:</label>
+                            <input type="text" class="form-control" id="condition" name="condition"
+                                value="{{ product.condition }}" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="form-group">
+                            <label for="mainCategory" class="form-label">Main Category:</label>
+                            <input type="text" class="form-control" id="mainCategory" name="mainCategory"
+                                value="{{ product.main_category }}" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="form-group">
+                            <label for="subcategory" class="form-label">Subcategory:</label>
+                            <input type="text" class="form-control" id="subcategory" name="subcategory"
+                                value="{{ product.subcategory }}" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="form-group">
+                            <label for="detail" class="form-label">Detail:</label>
+                            <input type="text" class="form-control" id="detail" name="detail"
+                                value="{{ product.detail }}" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="form-group">
+                            <label for="brand" class="form-label">Brand:</label>
+                            <input type="text" class="form-control" id="brand" name="brand" value="{{ product.brand }}">
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="form-group">
+                            <label for="warranty" class="form-label">Warranty:</label>
+                            <input type="text" class="form-control" id="warranty" name="warranty"
+                                value="{{ product.warranty }}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="form-group">
+                            <label for="contactName" class="form-label">Contact Name:</label>
+                            <input type="text" class="form-control" id="contactName" name="contactName"
+                                value="{{ product.contact_name }}" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="form-group">
+                            <label for="contactEmail" class="form-label">Contact Email:</label>
+                            <input type="email" class="form-control" id="contactEmail" name="contactEmail"
+                                value="{{ product.contact_email }}" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="form-group">
+                            <label for="contactPhone" class="form-label">Contact Phone:</label>
+                            <input type="text" class="form-control" id="contactPhone" name="contactPhone"
+                                value="{{ product.contact_phone }}" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="form-group">
+                            <label for="location" class="form-label">Location:</label>
+                            <input type="text" class="form-control" id="location" name="location"
+                                value="{{ product.location }}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group mb-4">
+                    <label for="additionalInfo" class="form-label">Additional Information:</label>
+                    <textarea class="form-control" id="additionalInfo" name="additionalInfo"
+                        rows="3">{{ product.additional_info }}</textarea>
+                </div>
+
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-primary btn-lg" id="submit-btn">
+                        <span id="submit-btn-text">Save Changes</span>
+                        <div class="spinner-border spinner-border-sm text-light d-none" role="status"
+                            id="submit-spinner">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </button>
+                    <a href="{{ url_for('product_detail', product_id=product.id) }}"
+                        class="btn btn-secondary btn-lg ml-3">Cancel</a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    const form = document.getElementById('edit-product-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const submitBtnText = document.getElementById('submit-btn-text');
+    const submitSpinner = document.getElementById('submit-spinner');
+
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+
+        submitBtn.disabled = true;
+        submitBtnText.style.display = 'none';
+        submitSpinner.classList.remove('d-none');
+
+
+        setTimeout(function () {
+            form.submit();
+        }, 2000);
+    });
+</script>
+
+{% endblock %}
+
+<style>
+    .card {
+        border-radius: 10px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-header {
+        background-color: #007bff;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    .btn {
+        padding: 15px;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        position: relative;
+        transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+        background-color: #0056b3;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .spinner-border {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .form-group label {
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+
+    .form-control {
+        border-radius: 8px;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.12);
+    }
+
+    .form-control:focus {
+        box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.15);
+        border-color: #007bff;
+    }
+
+    .form-check-input {
+        width: 1.5rem;
+        height: 1.5rem;
+    }
+
+    .form-check-label {
+        font-weight: 500;
+    }
+
+    .card-body {
+        background-color: #f9f9f9;
+    }
+
+    .form-control-lg {
+        font-size: 1.1rem;
+        padding: 15px;
+    }
+</style>

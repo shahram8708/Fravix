@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='logo2.png') }}" type="image/x-icon">
+    <title>Fravix E-Library - Premier Digital Resource Hub for Students & Faculty | GTU</title>
+    <meta name="description"
+        content="Vibrant Global Educational Center E-Library offers exclusive academic resources, including e-books, research papers, and interactive study tools for GTU students and faculty. Join our academic community today!">
+    <meta name="keywords"
+        content="Fravix E-Library, GTU resources, academic library, engineering materials, study tools, digital learning, student resources, research papers, e-books, OTP login, profile management, interactive features, educational portal">
+
+    <meta property="og:title" content="Fravix E-Library - Academic Resources for GTU Students & Faculty">
+    <meta property="og:description"
+        content="Access the Fravix E-Library for a curated selection of academic resources tailored for GTU students. Join our community to find, upload, and share educational materials!">
+    <meta property="og:image" content="{{ url_for('static', filename='logo2.png') }}">
+    <meta property="og:url" content="https://fravix.onrender.com/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Fravix E-Library">
+    <meta property="og:locale" content="en_US">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Fravix E-Library - Unlock a World of Knowledge">
+    <meta name="twitter:description"
+        content="Explore Fravix E-Library for exclusive academic resources, including e-books, research papers, and student tools for GTU. Join the learning community today!">
+    <meta name="twitter:image" content="{{ url_for('static', filename='logo2.png') }}">
+
+    <script type="application/ld+json">
+        {
+            "@context": "http://schema.org",
+            "@type": "Library",
+            "name": "Fravix E-Library",
+            "url": "https://fravix.onrender.com/",
+            "logo": "{{ url_for('static', filename='logo2.png') }}",
+            "description": "Fravix E-Library offers digital academic resources for GTU students and faculty, including e-books, research papers, and study tools.",
+            "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "Gujarat",
+                "addressCountry": "IN"
+            },
+            "sameAs": [
+                "https://x.com/multi_mosaic",
+                "https://www.facebook.com/profile.php?id=61574916413888"
+            ]
+        }
+    </script>
+
+    <link rel="canonical" href="https://fravix.onrender.com/">
+    <meta name="robots" content="index, follow">
+    <meta name="revisit-after" content="7 days">
+    <meta name="rating" content="General">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="google-adsense-account" content="ca-pub-9877839152732215">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9877839152732215"
+        crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container {
+            flex: 1;
+        }
+
+        .navbar {
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        footer {
+            background-color: #f8f9fa;
+            text-align: center;
+            padding: 1.5rem 0;
+            margin-top: 40px;
+        }
+
+        .hero {
+            position: relative;
+            background: url("{{ url_for('static', filename='library-hero.jpg') }}") no-repeat center center;
+            background-size: cover;
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 5px;
+            z-index: 1;
+        }
+
+        .hero h1,
+        .hero p {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero .btn {
+            position: relative;
+            z-index: 2;
+            margin-top: 20px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: bold;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+        }
+
+        footer ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        footer ul li {
+            margin-bottom: 10px;
+        }
+
+        footer a {
+            color: #333;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        footer h5 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        footer .footer-links {
+            text-align: left;
+        }
+
+        .blink {
+            animation: blink-animation 1s steps(5, start) infinite;
+        }
+
+        @keyframes blink-animation {
+            50% {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('home') }}">
+                <img src="{{ url_for('static', filename='logo2.png') }}" alt="Fravix E-Library" style="height: 40px;">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://fravix.onrender.com/" target="_blank">Resources</a>
+                    </li>
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="uploadDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Uploads
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="uploadDropdown">
+                            <li><a class="dropdown-item" href="{{ url_for('upload') }}">Upload Material</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('upload_item') }}">Upload Product</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('recommendations') }}">Get Material</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('products') }}">Buy Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('my_favourites') }}">Bookmarks</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="uploadDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Groups
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="uploadDropdown">
+                            <li><a class="dropdown-item" href="{{ url_for('create_group') }}">Create Group</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('group_list') }}">Join Groups</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('subscribe') }}">Get Premium</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('profile', user_id=current_user.id) }}">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('users_list') }}">User List</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if current_user.is_authenticated and unread_count > 0 %} text-danger blink {% endif %}"
+                            href="{{ url_for('notifications') }}">
+                            Notifications
+                            {% if current_user.is_authenticated %}
+                            {% if unread_count > 0 %}
+                            <span class="badge bg-danger"
+                                style="border-radius: 50%; width: 1em; height: 1em; display: inline-block;">
+                            </span>
+                            {% endif %}
+                            {% endif %}
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('register') }}">Register</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('admin_dashboard') }}">Admin</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="navbar navbar-light bg-light fixed-bottom d-lg-none shadow">
+        <div class="container-fluid">
+            <ul class="navbar-nav w-100 d-flex justify-content-around">
+                <li class="nav-item text-center w-25">
+                    <a class="nav-link" href="{{ url_for('home') }}">
+                        <i class="bi bi-house-door"></i><br>Home
+                    </a>
+                </li>
+                <li class="nav-item text-center w-25">
+                    <a class="nav-link" href="https://fravix.onrender.com/" target="_blank">
+                        <i class="bi bi-book"></i><br>Resources
+                    </a>
+                </li>
+                <li class="nav-item text-center w-25">
+                    {% if current_user.is_authenticated %}
+                    <a class="nav-link" href="{{ url_for('profile', user_id=current_user.id) }}">
+                        <i class="bi bi-person"></i><br>Profile
+                    </a>
+                    {% else %}
+                    <a class="nav-link" href="{{ url_for('login') }}">
+                        <i class="bi bi-person"></i><br>Login
+                    </a>
+                    {% endif %}
+                </li>
+                <style>
+                    @keyframes blink {
+                        0% {
+                            opacity: 1;
+                        }
+
+                        50% {
+                            opacity: 0.4;
+                        }
+
+                        100% {
+                            opacity: 1;
+                        }
+                    }
+
+                    .blink-red {
+                        color: red !important;
+                        animation: blink 1s infinite;
+                    }
+
+                    .notification-icon {
+                        position: relative;
+                        display: inline-block;
+                    }
+
+                    .notification-badge {
+                        position: absolute;
+                        top: -5px;
+                        right: -5px;
+                        width: 10px;
+                        height: 10px;
+                        background-color: red;
+                        border-radius: 50%;
+                        display: inline-block;
+                    }
+                </style>
+
+                <li class="nav-item text-center w-25">
+                    <a class="nav-link {% if current_user.is_authenticated and unread_count > 0 %}blink-red{% endif %}"
+                        href="{{ url_for('notifications') }}">
+                        <span class="notification-icon">
+                            <i class="bi bi-bell"></i>
+                            {% if current_user.is_authenticated and unread_count > 0 %}
+                            <span class="notification-badge"></span>
+                            {% endif %}
+                        </span>
+                        <br>Notifications
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        @media (max-width: 992px) {
+
+            .navbar-toggler {
+                display: block;
+            }
+
+            .navbar.fixed-bottom {
+                display: block;
+            }
+
+            .navbar.fixed-bottom .navbar-nav {
+                display: flex;
+                justify-content: space-around;
+                flex-direction: row;
+            }
+
+            .nav-item {
+                text-align: center;
+            }
+
+            .nav-link {
+                font-size: 12px;
+                padding: 5px;
+            }
+
+            .nav-link i {
+                font-size: 20px;
+            }
+
+            .nav-item:hover .nav-link {
+                color: #007bff;
+                text-decoration: none;
+            }
+
+            .badge {
+                top: -5px;
+                right: -5px;
+                font-size: 0.8em;
+            }
+        }
+
+        .navbar .navbar-nav .nav-item .nav-link {
+            padding: 10px;
+        }
+    </style>
+
+    </style>
+    <div class="container mt-5" style="padding-top: 70px;">
+        <div class="col-12">
+            <form method="POST" action="{{ url_for('search') }}">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Search for resources..." name="query" required>
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="hero">
+            <h1>Welcome to Fravix E-Library</h1>
+            <p class="px-3 py-2">Your gateway to knowledge! Upload study materials to help others and access valuable
+                resources.</p>
+            <a href="{{ url_for('recommendations') }}" class="btn btn-warning btn-lg">Start Searching</a>
+            <a href="{{ url_for('upload') }}" class="btn btn-success btn-lg">Start Uploading</a>
+            <p class="px-3 py-2">Your gateway to both buying and selling products! Upload your items to help others and
+                explore affordable options for purchase.</p>
+            <a href="{{ url_for('upload_item') }}" class="btn btn-primary btn-lg">Upload Products</a>
+            <a href="{{ url_for('products') }}" class="btn btn-danger btn-lg">Purchase Products</a>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="alert alert-info" role="alert">
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+    <div class="container mt-5">
+        <div class="card shadow-sm border-0 rounded">
+            <div class="card-body">
+                <div class="text-center">
+                    <h5 class="card-title text-primary fw-bold">Need Immediate Assistance?</h5>
+                    <p class="card-text text-muted">If you have any urgent queries or need real-time assistance, click
+                        the button below to chat directly with our admin.</p>
+                    <p class="card-text text-muted">Once you click "Chat with Admin," a chat window will open where you
+                        can type your messages. The admin will respond as soon as possible.</p>
+                </div>
+
+                <div class="text-center mt-4">
+                    <a href="{{ url_for('chat', user_id=1) }}" class="btn btn-info btn-lg px-4 py-2">
+                        <i class="bi bi-chat-dots me-2"></i>Chat with Admin
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="position-fixed bottom-0 end-0 m-3" style="z-index: 1050; bottom: 80px !important;">
+        <div class="dropdown">
+            <a class="btn btn-primary rounded-circle p-3 d-flex align-items-center justify-content-center position-relative shadow"
+                href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"
+                onclick="hideNotificationCount()">
+                <i class="fas fa-bell fa-lg"></i>
+                {% if unread_count > 0 %}
+                <span id="notificationCount"
+                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    {{ unread_count }}
+                </span>
+                {% endif %}
+            </a>
+
+            <ul class="dropdown-menu dropdown-menu-end p-2" aria-labelledby="notificationDropdown" max-height: 400px;
+                overflow-y: auto;">
+                <li class="dropdown-header fw-bold text-primary"><a href="{{ url_for('notifications') }}"
+                        class="see-more-link text-primary" style="text-decoration: none; font-weight: bold;">
+                        See Complete Notifications
+                    </a></li>
+                <hr class="my-1">
+
+                {% if notifications %}
+                {% for notification in notifications %}
+                <li class="mb-2">
+                    {% if notification.notification_type == "login_alert" %}
+                    <a class="dropdown-item d-flex justify-content-between align-items-center"
+                        href="{{ url_for('change_password') }}">
+                        <div>
+                            <strong>Security Alert:</strong> New login detected.
+                        </div>
+                    </a>
+                    {% elif notification.notification_type == "follow" %}
+                    <a class="dropdown-item" href="{{ url_for('user_profile', user_id=notification.sender_id) }}">
+                        <strong>{{ notification.sender.username }}</strong> started following you.
+                    </a>
+                    {% elif notification.notification_type == "profile_view" %}
+                    <a class="dropdown-item" href="{{ url_for('user_profile', user_id=notification.sender_id) }}">
+                        <strong>{{ notification.sender.username }}</strong> viewed your profile.
+                    </a>
+                    {% elif notification.notification_type == "comment" and notification.resource_id %}
+                    <a class="dropdown-item"
+                        href="{{ url_for('resource_detail', resource_id=notification.resource_id) }}">
+                        <strong>{{ notification.sender.username }}</strong> commented on your resource.
+                    </a>
+                    {% elif notification.notification_type == "comment_reply" and notification.resource_id %}
+                    <a class="dropdown-item"
+                        href="{{ url_for('resource_detail', resource_id=notification.resource_id) }}">
+                        <strong>{{ notification.sender.username }}</strong> replied to your comment.
+                    </a>
+                    {% elif notification.message_id is not none %}
+                    <a class="dropdown-item" href="{{ url_for('chat', user_id=notification.sender_id) }}">
+                        <strong>{{ notification.sender.username }}</strong> sent you a message: "{{
+                        notification.message.content }}"
+                    </a>
+                    {% elif notification.notification_type == "password_reset" %}
+                    <a class="dropdown-item" href="{{ url_for('login') }}">
+                        <strong>Password Reset:</strong> Your password has been successfully reset.
+                    </a>
+                    {% elif notification.notification_type == "admin_promotion" %}
+                    <a class="dropdown-item" href="{{ url_for('group_list') }}">
+                        <strong>Admin Promotion:</strong> {{ notification.msg }}
+                    </a>
+                    {% elif notification.notification_type == "admin_demotion" %}
+                    <a class="dropdown-item" href="{{ url_for('group_list') }}">
+                        <strong>Admin Demotion:</strong> {{ notification.msg }}
+                    </a>
+                    {% elif notification.notification_type == "join_request" %}
+                    <a class="dropdown-item" href="{{ url_for('group_list') }}">
+                        <strong>Join Request:</strong> {{ notification.msg }}
+                    </a>
+                    {% elif notification.notification_type == "approval" %}
+                    <a class="dropdown-item" href="{{ url_for('group_list') }}">
+                        <strong>Approval:</strong> {{ notification.msg }}
+                    </a>
+                    {% elif notification.notification_type == "rejection" %}
+                    <a class="dropdown-item" href="{{ url_for('group_list') }}">
+                        <strong>Rejection:</strong> {{ notification.msg }}
+                    </a>
+                    {% elif notification.notification_type == "group_message" %}
+                    <a class="dropdown-item" href="{{ url_for('group_list') }}">
+                        <strong>Group Message:</strong> {{ notification.msg }}
+                    </a>
+                    {% endif %}
+                </li>
+                {% endfor %}
+                {% else %}
+                <li><a class="dropdown-item text-center">No notifications available.</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+
+    <style>
+        .btn-primary.rounded-circle {
+            width: 60px;
+            height: 60px;
+            font-size: 1.5rem;
+        }
+
+        .dropdown-menu {
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .badge {
+            font-size: 0.8rem;
+            padding: 0.5em;
+        }
+
+        .dropdown-item {
+            align-items: center;
+            border-radius: 0.5rem;
+            transition: background-color 0.2s;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+        }
+    </style>
+    <script>
+        function hideNotificationCount() {
+            var notificationCount = document.getElementById('notificationCount');
+            if (notificationCount) {
+                notificationCount.style.display = 'none';
+                sessionStorage.setItem('notificationHidden', 'true');
+            }
+        }
+
+        document.getElementById('notificationIcon').addEventListener('click', function () {
+            hideNotificationCount();
+        });
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <!-- <div class="container mt-5">
+        <div class="alert alert-success custom-subscription-alert">
+            <h2 class="alert-heading text-center font-weight-bold">Unlock Limitless Possibilities with a Subscription!
+            </h2>
+            <p class="lead text-center">
+                Get ready to unlock a world of exclusive features and take your experience to the next level. A
+                subscription will provide you unlimited access to premium benefits that will transform your journey.
+            </p>
+
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <ul class="custom-benefits-list">
+                        <li><strong>🎓 Unlimited Study Material Upload</strong> – Upload as many study materials as you
+                            wish and contribute to the learning community.</li>
+                        <li><strong>📚 Unlimited Material Access</strong> – Explore unlimited study resources from other
+                            users. Enhance your learning without any barriers!</li>
+                        <li><strong>🤖 AI-Powered Chatbot Assistance</strong> – Our state-of-the-art AI chatbot will
+                            guide you, answer your questions, and help you find the best resources for your studies.
+                        </li>
+                        <li><strong>💬 Connect with Others</strong> – Build connections with like-minded users. Follow,
+                            message, and share ideas freely!</li>
+                        <li><strong>🔗 Create & Join Unlimited Groups</strong> – Foster collaboration with public and
+                            private groups, where you can exchange knowledge, materials, and ideas.</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <ul class="custom-benefits-list">
+                        <li><strong>💡 Real-Time Notifications</strong> – Stay updated with real-time alerts about
+                            profile visits, new messages, and platform activity.</li>
+                        <li><strong>🔍 Profile Insights</strong> – See who’s visiting your profile, engage with them,
+                            and network easily.</li>
+                        <li><strong>💰 Sell Products</strong> – Upload and sell old or new study materials, books,
+                            gadgets, or other products. No limits on what you can upload!</li>
+                        <li><strong>💸 Unlimited Product Purchases</strong> – Buy items at lower prices from other
+                            users. No commission fees, just the best deals!</li>
+                        <li><strong>✨ Exclusive AI Features</strong> – Unlock premium AI-powered tools that will
+                            personalize your learning journey, suggest the best study resources, and optimize your
+                            experience.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <p class="lead text-center mt-4">
+                Don’t let this opportunity pass you by. Enjoy unrestricted access to all these amazing features and more
+                by subscribing today. Revolutionize the way you learn, share, and grow!
+            </p>
+
+            <div class="text-center">
+                <a href="{{ url_for('subscribe') }}" class="btn btn-danger btn-lg custom-subscribe-btn">Subscribe
+                    Now</a>
+            </div>
+
+            <h4 class="text-center mt-5">Already a subscriber? Enjoy all the benefits and features without limitations!
+            </h4>
+        </div>
+    </div> -->
+
+    <style>
+        .custom-subscription-alert {
+            background-color: #f0f8ff;
+            border-color: #7ec8f3;
+            color: #084b61;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .alert-heading {
+            font-size: 2rem;
+            color: #004085;
+        }
+
+        .font-weight-bold {
+            font-weight: bold;
+        }
+
+        .custom-benefits-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .custom-benefits-list li {
+            padding-left: 20px;
+            position: relative;
+            font-size: 1.2rem;
+        }
+
+        .custom-benefits-list li::before {
+            content: "✔";
+            color: #31708f;
+            position: absolute;
+            left: 0;
+            font-size: 1.5rem;
+            top: 0;
+        }
+
+        .custom-subscribe-btn {
+            background-color: #ff6f61;
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            transition: background-color 0.3s ease;
+        }
+
+        .custom-subscribe-btn:hover {
+            background-color: #e04f3a;
+        }
+
+        h4 {
+            color: #2f4f4f;
+        }
+
+        .lead {
+            font-size: 1.2rem;
+            line-height: 1.5;
+            color: #5f6368;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+    </style>
+
+    <footer class="pt-4 bg-light text-center" style="padding-bottom: 100px;">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-3 mb-3">
+                    <h5>Fravix E-Library</h5>
+                    <p>Explore a wide range of resources to enhance your academic journey.</p>
+                </div>
+                <hr>
+                <div class="col-lg-2 mb-3">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{{ url_for('home') }}">Home</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('posts') }}">Update</a>
+                        </li>
+                        <li><a href="{{ url_for('our_team') }}">Team</a></li>
+                        {% if current_user.is_authenticated %}
+                        <li><a href="{{ url_for('upload') }}">Upload</a></li>
+                        <li><a href="{{ url_for('recommendations') }}">Discover</a></li>
+                        <li><a href="{{ url_for('my_favourites') }}">Bookmarks</a></li>
+                        <li><a href="{{ url_for('subscribe') }}">Get Premium</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <div class="col-lg-2 mb-3">
+                    <h5>Help & Support</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{{ url_for('contact') }}">Support</a></li>
+                        <li><a href="{{ url_for('faq') }}">FAQ</a></li>
+                        <li><a href="{{ url_for('terms_conditions') }}">Policies</a></li>
+                        <li><a href="{{ url_for('privacy_policy') }}">Privacy</a></li>
+                        <li><a href="{{ url_for('about') }}">About Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 mb-3">
+                    <h5>User Section</h5>
+                    <ul class="list-unstyled">
+                        {% if current_user.is_authenticated %}
+                        <li><a href="{{ url_for('profile', user_id=current_user.id) }}">Profile</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('users_list') }}">Users</a>
+                        </li>
+                        <li><a href="{{ url_for('edit_profile') }}">Edit Profile</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if current_user.is_authenticated and unread_count > 0 %} text-danger blink {% endif %}"
+                                href="{{ url_for('notifications') }}">
+                                Notifications
+                                {% if current_user.is_authenticated %}
+                                {% if unread_count > 0 %}
+                                <span class="badge bg-danger"
+                                    style="border-radius: 50%; width: 1em; height: 1em; display: inline-block;">
+                                </span>
+                                {% endif %}
+                                {% endif %}
+                            </a>
+                        </li>
+                        <li><a href="{{ url_for('thanks') }}">Contributors</a></li>
+                        <li><a href="{{ url_for('chatbot') }}">ChatBot</a></li>
+                        <li><a href="{{ url_for('admin_dashboard') }}">Admin</a></li>
+                        {% else %}
+                        <li><a href="{{ url_for('login') }}">Login</a></li>
+                        <li><a href="{{ url_for('register') }}">Register</a></li>
+                        <li><a href="{{ url_for('admin_dashboard') }}">Admin</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+
+                {% if current_user.is_authenticated %}
+                <div class="col-lg-2 mb-3">
+                    <h5>Profile Section</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{{ url_for('change_password') }}">Change Password</a></li>
+                        <li>
+                            <a class="nav-link" href="{{ url_for('forgot_password') }}">Forget Passowrd</a>
+                        </li>
+                        <li><a href="{{ url_for('verify_account') }}">Verify Account</a></li>
+                        <li><a href="{{ url_for('upload_item') }}">Upload Product</a></li>
+                        <li><a href="{{ url_for('products') }}">Buy Products</a></li>
+                        <li><a href="{{ url_for('create_group') }}">Create Group</a></li>
+                        <li><a href="{{ url_for('group_list') }}">Join Groups</a></li>
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <hr class="my-4">
+
+        <div class="text-center">
+            <span>&copy; 2025 Fravix E-Library. All rights reserved.</span><br>
+            <span class="text-muted">Total Users: {{ total_users }}</span>
+            <br>
+            <span class="text-muted">Last updated: April 18, 2025</span>
+        </div>
+        </div>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

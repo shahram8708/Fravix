@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4" style="text-align: center;">Search Results</h2>
+    <div class="row mt-5">
+        <div class="col-md">
+            <ul class="list-group">
+                {% if results %}
+                {% for result in results %}
+                <li class="list-group-item mb-3 border border-secondary rounded">
+                    <h5>
+                        <a href="{{ url_for('resource_detail', resource_id=result.id) }}" class="text-primary"
+                            style="text-decoration: none;">
+                            {{ result.title }}
+                        </a>
+                    </h5>
+                    <p>{{ result.description }}</p>
+                </li>
+                {% endfor %}
+                {% else %}
+                <li class="list-group-item mb-3 border border-secondary rounded">
+                    <p>No results found for your query.</p>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

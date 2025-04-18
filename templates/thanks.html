@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Special Thanks to Our Contributors</h2>
+
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Contributors</h4>
+        </div>
+        <div class="card-body">
+            {% if materials %}
+            <p class="text-muted text-center mb-4">We sincerely appreciate the efforts of the following users who have
+                contributed valuable materials to our platform.</p>
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Sr. No</th>
+                            <th>User Name</th>
+                            <th>Profile</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for material in materials %}
+                        <tr>
+                            <td>{{ loop.index }}</td> <!-- Serial number -->
+                            <td>{{ material.user.username }}</td>
+                            <td>
+                                <a href="{{ url_for('resource_detail', resource_id=material.id) }}"
+                                    class="btn btn-success btn-sm">View</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="text-center text-muted">No contributors available at the moment.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
