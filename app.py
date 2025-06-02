@@ -16,7 +16,7 @@ from datetime import timedelta
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://fravix_user:2DuiVbGuTTopCYiNkbCNSioZqaokX974@dpg-d00rs6qdbo4c73dkbjs0-a.singapore-postgres.render.com/fravix'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://fravix_e6rb_user:xoSaH15tuTJOmhqa4k8KZmPAVkJ7BWrm@dpg-d0ui0iu3jp1c7383l16g-a.singapore-postgres.render.com/fravix_e6rb'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
