@@ -16,7 +16,7 @@ from datetime import timedelta
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://fravix_e6rb_user:xoSaH15tuTJOmhqa4k8KZmPAVkJ7BWrm@dpg-d0ui0iu3jp1c7383l16g-a.singapore-postgres.render.com/fravix_e6rb'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://neondb_owner:npg_g8TKbJUyp0zO@ep-autumn-grass-a9damcph-pooler.gwc.azure.neon.tech/neondb?sslmode=require&channel_binding=require'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
